@@ -11,9 +11,9 @@ public class GameManager {
     static DefaultListModel<Object> projectFilesModel = new DefaultListModel<Object>();
     public static DefaultListModel<GameComponent>  classNameModel = new DefaultListModel<GameComponent>();
     
-    public static void getFilesPaths()
+    public static void getFilesPaths(String projectPath)
     {
-        File Directory = new File("GameEngine/DirectoryTest");
+        File Directory = new File(projectPath);
         File[] list = Directory.listFiles();
         for (File file : list)
             projectFilesModel.addElement(file);

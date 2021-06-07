@@ -51,7 +51,8 @@ public abstract class GameComponent {
         if (this.removable) {
             // setting closeButton
             JButton closeButton = new JButton();
-            // closeButton.setIcon(new ImageIcon("GameEngine\\Icons\\cross.png"));
+            closeButton.setIcon(new ImageIcon("GameEngine/Icons/cross.png"));
+            closeButton.addActionListener(e->remove(this));
             closeButton.setBounds(300 - 50, 5, 20, 20);
             closeButton.setBackground(Color.darkGray);
             panel.add(closeButton);
@@ -104,6 +105,11 @@ public abstract class GameComponent {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void remove(GameComponent gameComponent) {
+        MainProgram.selectedObject.properties.removeElement(this);
+        Test.main.showPanelofSelected();
     }
 
     public GameComponent newObject() throws InstantiationException, IllegalAccessException, IllegalArgumentException,
