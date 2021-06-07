@@ -19,31 +19,31 @@ public class Customize extends JFrame
 
         JLabel fgLabel = new JLabel("ForeGround color  :  ");
         fgLabel.setBounds(20,20,130,30);
-        fgLabel.setBackground(MainProgram.fg_color);
+        fgLabel.setBackground(Test.main.fg_color);
         this.add(fgLabel);
 
         JButton fgButton = new JButton("Choose");
         fgButton.setBounds(150, 20, 100, 30);
         fgButton.setHorizontalTextPosition(JButton.CENTER);
-        fgButton.addActionListener(e->MainProgram.fg_color = changeColor());
+        fgButton.addActionListener(e->Test.main.fg_color = changeColor());
         this.add(fgButton);
 
         JLabel bgLabel = new JLabel("BackGround color  :  ");
         bgLabel.setBounds(20,70,130,30);
-        bgLabel.setBackground(MainProgram.bg_color);
+        bgLabel.setBackground(Test.main.bg_color);
         this.add(bgLabel);
 
         JButton bgButton = new JButton("Choose");
         bgButton.setBounds(150, 70, 100, 30);
         bgButton.setHorizontalTextPosition(JButton.CENTER);
-        bgButton.addActionListener(e->MainProgram.bg_color = changeColor());
+        bgButton.addActionListener(e->Test.main.bg_color = changeColor());
         this.add(bgButton);
 
         JButton updateButton = new JButton("Update");
         updateButton.setBounds(60, 120, 150, 30);
         updateButton.setHorizontalTextPosition(JButton.CENTER);
-        updateButton.addActionListener(e -> {Test.main.updateColor(); 
-                                            Test.main.refreshFrame();});
+        updateButton.addActionListener(e -> {Test.main.refreshFrame();
+                                            Test.main.updateColor(); });
         this.add(updateButton);
     }
 
@@ -51,6 +51,12 @@ public class Customize extends JFrame
     {
         Color color = JColorChooser.showDialog(null, "Choose a color", Color.black);
         return color;
+    }
+    void refreshFrame()
+    {
+        this.invalidate();
+        this.validate();
+        this.repaint();
     }
     
 }

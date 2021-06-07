@@ -40,8 +40,8 @@ public class MainProgram extends JFrame {
     // GameObject selectedObject;
 
     // colors for main program
-    public static Color fg_color;
-    public static Color bg_color;
+    public Color fg_color;
+    public Color bg_color;
 
     // JTabbedPane for different tabs in the window
     JTabbedPaneCloseButton tabbedPane;
@@ -89,7 +89,7 @@ public class MainProgram extends JFrame {
         objectsList.setCellRenderer(new ObjectRenderer());
 
         menuBar = new JMenuBar();
-        fg_color = Color.black;
+        fg_color = Color.red;
         bg_color = Color.white;
 
         // Making the frame/ window
@@ -368,12 +368,12 @@ public class MainProgram extends JFrame {
 
     private void addObject() {
         GameManager.objectsModel.addElement(new GameObject());
+        updateColor();
     }
 
     public void showPanelofSelected() {
         inspectorPanel.removeAll();
         tempPanel.removeAll();
-
         // changing the layout of inspector panel
         tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.Y_AXIS));
 
@@ -383,13 +383,10 @@ public class MainProgram extends JFrame {
         {
             for (int i = 0; i < selectedObject.properties.getSize(); i++) {
                 JPanel componentPanel = selectedObject.properties.elementAt(i).panel;
-                componentPanel.setBackground(bg_color);
-                componentPanel.setForeground(fg_color);
                 tempPanel.add(componentPanel);
             }
         }
-        tempPanel.setBackground(bg_color);
-        tempPanel.setForeground(fg_color);
+
         scrollPane = new JScrollPane(tempPanel,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -463,14 +460,19 @@ public class MainProgram extends JFrame {
         projectFilesList.setBackground(bg_color);
         projectFilesList.setForeground(fg_color);
 
-        tempPanel.setBackground(bg_color);
-        tempPanel.setForeground(fg_color);
+        inspectorPanel.setBackground(bg_color);
+        inspectorPanel.setForeground(fg_color);
 
-        if (!(selectedObject == null))
+        for (int i = 0; i < GameManager.objectsModel.getSize(); i++ )
         {
-            for (int i=0; i<selectedObject.properties.getSize(); i++){
-                selectedObject.properties.getElementAt(i).panel.setBackground(bg_color);
-                selectedObject.properties.getElementAt(i).panel.setForeground(fg_color);
+            for (int j = 0; j < GameManager.objectsModel.getElementAt(i).properties.getSize(); j++) 
+            {
+                GameManager.objectsModel.getElementAt(i).properties.getElementAt(j).panel.setBackground(bg_color);
+                GameManager.objectsModel.getElementAt(i).properties.getElementAt(j).panel.setForeground(fg_color);
+                for (int k = 0; k < GameManager.objectsModel.getElementAt(i).properties.getElementAt(j).labels.size(); k++) 
+                {
+                    GameManager.objectsModel.getElementAt(i).properties.getElementAt(j).labels.get(k).setForeground(fg_color);
+                }
             }
         }
     }

@@ -7,12 +7,11 @@ import GameEngine.Components.*;
 public class Test {
     public static MainProgram main;
     public static void main(String[] args) {
-        GameManager.getFilesPaths("/home/MuhammadMustafa/Music/TestProject");
-        // Initializing the components
-        // ---------------
+        GameManager.getFilesPaths("H:\\");
+        main = new MainProgram();
         new Child1();
         new Child2();
-        new NewScript();
-        main = new MainProgram();
+        main.refreshFrame();
+        
     }
 }

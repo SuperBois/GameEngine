@@ -41,16 +41,4 @@ public class Child1 extends GameComponent {
     {
         return class1 + "\n" + class2 + "\n" + class3 + "\n" + class4 + "\n" + class5 ;
     }
-
-    @Override
-    public void Start() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void Update() {
-        // TODO Auto-generated method stub
-        
-    }
 }

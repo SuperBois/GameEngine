@@ -9,11 +9,16 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import java.awt.Adjustable;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 
 import GameEngine.GameManager;
 import GameEngine.MainProgram;
@@ -23,32 +28,33 @@ import GameEngine.Renderer.ComponentListRenderer;
 
 public class AddComponent extends GameComponent {
 
-    JList<GameComponent> filteredClassList;
+    JList<GameComponent> classesListBox;
     JScrollPane scrollPane;
     JTextField textField;
     JPanel componentPanel;
     JButton addComponentButton;
-    DefaultListModel<GameComponent> filteredClassModel;
+    DefaultListModel<GameComponent> filteredClassList;
     JButton button;
 
     public AddComponent() {
         // initializing the necessary fields
         textField = new JTextField();
-        filteredClassModel = new DefaultListModel<GameComponent>();
-        filteredClassList = new JList<GameComponent>(filteredClassModel);
+        filteredClassList = new DefaultListModel<GameComponent>();
+        classesListBox = new JList<GameComponent>(filteredClassList);
         
-        for (int i=0; i<GameManager.classNameModel.getSize(); i++){
-            filteredClassModel.addElement(GameManager.classNameModel.elementAt(i));
+        for (int i=0; i<GameManager.classNameModel.getSize(); i++)
+        {
+            filteredClassList.addElement(GameManager.classNameModel.elementAt(i));
         }
 
         textField.setSize(new Dimension(270, 30));;
         textField.setText("");
         removable = false;
 
-        filteredClassList.setVisibleRowCount(4);
-        scrollPane = new JScrollPane(filteredClassList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+        classesListBox.setVisibleRowCount(4);
+        scrollPane = new JScrollPane(classesListBox, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        filteredClassList.setCellRenderer(new ComponentListRenderer());
+        classesListBox.setCellRenderer(new ComponentListRenderer());
 
         createPanel();
     }
@@ -99,7 +105,6 @@ public class AddComponent extends GameComponent {
         textField.setVisible(true);
         scrollPane.setVisible(true);
         button.setVisible(true);
-        filteredClassList.setSelectedIndex(0);
         // scrolls the panel to bottom 
         Test.main.scrollToBottom();
         // refreshes the frame
@@ -110,23 +115,19 @@ public class AddComponent extends GameComponent {
 
     // filters the contenets of the classNameModels based on the entered text
     private void filterComponents() {
-        filteredClassModel.removeAllElements();
+        filteredClassList.removeAllElements();
         for (int i=0; i<GameManager.classNameModel.getSize(); i++){
             
             String className = GameManager.classNameModel.elementAt(i).getClass().getSimpleName();
             if (className.toLowerCase().contains(textField.getText().toLowerCase()))
-                filteredClassModel.addElement(GameManager.classNameModel.elementAt(i));
+                filteredClassList.addElement(GameManager.classNameModel.elementAt(i));
         }
-        // if new script is not in the list then add it
-        if (!filteredClassModel.contains(GameManager.classNameModel.lastElement()))
-            filteredClassModel.addElement(GameManager.classNameModel.lastElement());
-        // sets the selected index to 0
-        filteredClassList.setSelectedIndex(0);
+        classesListBox.setSelectedIndex(0);
     }
 
     // adds selected class at the second last index of object's list model
     void addComponent(){
-        GameComponent selectedClass = GameManager.classNameModel.elementAt(filteredClassList.getSelectedIndex());
+        GameComponent selectedClass = GameManager.classNameModel.elementAt(classesListBox.getSelectedIndex());
         // add element at second last index
         MainProgram.selectedObject.properties.add(MainProgram.selectedObject.properties.getSize()-1, selectedClass);
         Test.main.showPanelofSelected();
@@ -134,24 +135,13 @@ public class AddComponent extends GameComponent {
         scrollPane.setVisible(false);
         textField.setVisible(false);
         addComponentButton.setVisible(true);
+        Test.main.updateColor();
         Test.main.scrollToBottom();
     }
     void refreshFrame(){
         Test.main.invalidate();
         Test.main.validate();
         Test.main.repaint();
-    }
-
-    @Override
-    public void Start() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void Update() {
-        // TODO Auto-generated method stub
-        
     }
 
     
