@@ -21,14 +21,14 @@ public class FilesRenderer extends JLabel implements ListCellRenderer<Object> {
         if (f.getName().contains("."))
         {
             if ((f.getName().contains(".zip")))
-                setIcon(new ImageIcon("GameEngine/Icons/zip.png"));
+                setIcon(new ImageIcon("..\\Icons\\zip.png"));
             else if ((f.getName().contains(".java")))
-                setIcon(new ImageIcon("GameEngine/Icons/java.png"));
+                setIcon(new ImageIcon("..\\Icons\\java.png"));
             else
-                setIcon(new ImageIcon("GameEngine/Icons/text.png"));
+                setIcon(new ImageIcon("..\\Icons\\text.png"));
         }
         else
-            setIcon(new ImageIcon("GameEngine/Icons/folder.png"));
+            setIcon(new ImageIcon("..\\Icons\\folder.png"));
         setText(name);
         setHorizontalAlignment(JLabel.CENTER);
         setHorizontalTextPosition(JLabel.CENTER);

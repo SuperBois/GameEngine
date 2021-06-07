@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import GameEngine.Renderer.DebugRenderer;
 import GameEngine.Renderer.FilesRenderer;
 import GameEngine.Renderer.JTabbedPaneCloseButton;
 import GameEngine.Renderer.ObjectRenderer;
@@ -25,11 +26,9 @@ public class MainProgram extends JFrame {
 
     // Record of the debug statements on the debug console
     static JList<String> debugList;
-    public DefaultListModel<String> debugModel;
 
     // Record of the created objects
     static JList<GameObject> objectsList;
-    public DefaultListModel<GameObject> objectsModel;
 
     // Record of the created objects
     static JList<Object> projectFilesList;
@@ -41,8 +40,8 @@ public class MainProgram extends JFrame {
     // GameObject selectedObject;
 
     // colors for main program
-    protected Color fg_color;
-    protected Color bg_color;
+    public static Color fg_color;
+    public static Color bg_color;
 
     // JTabbedPane for different tabs in the window
     JTabbedPaneCloseButton tabbedPane;
@@ -60,11 +59,12 @@ public class MainProgram extends JFrame {
         tempPanel = new JPanel();
         tabbedPane = new JTabbedPaneCloseButton();
         // the list of all elements displayed in debugPanel
-        if (debugModel == null) {
-            debugModel = new DefaultListModel<String>(); // for test only
+        if (GameManager.debugModel == null) {
+            GameManager.debugModel = new DefaultListModel<String>(); // for test only
             System.out.println("Warning: The Debug model is null");
         }
-        debugList = new JList<String>(debugModel);
+        debugList = new JList<String>(GameManager.debugModel);
+        debugList.setCellRenderer(new DebugRenderer());
         
         space = "    ";
         // creates a new jlist
@@ -211,7 +211,7 @@ public class MainProgram extends JFrame {
         JScrollPane debugScrollPane = new JScrollPane(debugList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         // changing the appearance of the text displayed in infopanel
-        debugList.setBackground(Color.yellow);
+        debugList.setBackground(bg_color);
         debugList.setForeground(fg_color);
         infoPanel.add(debugScrollPane);
         // ---------------------- PREPARES THE projectFilesPanel FOR DISPLAYING Project
@@ -249,7 +249,7 @@ public class MainProgram extends JFrame {
         JScrollPane filesScrollPane = new JScrollPane(projectFilesList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         // changing the appearance of the text displayed in infopanel
-        projectFilesList.setBackground(Color.orange);
+        projectFilesList.setBackground(bg_color);
         projectFilesList.setForeground(fg_color);
         projectFilesPanel.add(filesScrollPane);
 
@@ -265,6 +265,31 @@ public class MainProgram extends JFrame {
         objectsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane objectsScrollPane = new JScrollPane(objectsList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+                JPopupMenu objectPopupMenu = new JPopupMenu();
+        JMenuItem deleteOption = new JMenuItem("Delete");
+        deleteOption.addActionListener(e->{GameManager.objectsModel.removeElement(selectedObject);
+                                           refreshFrame();
+                                          }
+                                      );
+        objectPopupMenu.add(deleteOption);
+
+        objectsList.addMouseListener(new MouseAdapter()
+        {
+                public void mousePressed(MouseEvent evt) {
+                    if (evt.isPopupTrigger() && !(selectedObject == null)) {
+                        showMenu(evt);
+                    }
+                }
+                public void mouseReleased(MouseEvent evt) {
+                    if ((evt.isPopupTrigger() && !(selectedObject == null))) {
+                        showMenu(evt);
+                    }
+                }
+                private void showMenu(MouseEvent evt) {
+                    objectPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());    
+            }
+        });
 
         // selection listener for objects list
         // displays the panel of currently selected object
@@ -325,8 +350,7 @@ public class MainProgram extends JFrame {
         CustomizeEditor.setSize(50, 30);
         CustomizeEditor.setText("Customize");
         CustomizeEditor.addActionListener(e -> {
-            // new Customize(this);
-
+            new Customize();
         });
         ribbon.add(CustomizeEditor);
         // ----------------------------------------------------
@@ -349,15 +373,23 @@ public class MainProgram extends JFrame {
     public void showPanelofSelected() {
         inspectorPanel.removeAll();
         tempPanel.removeAll();
+
         // changing the layout of inspector panel
         tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.Y_AXIS));
 
         selectedObject = objectsList.getSelectedValue();
-        for (int i = 0; i < selectedObject.properties.getSize(); i++) {
-            JPanel componentPanel = selectedObject.properties.elementAt(i).panel;
-            tempPanel.add(componentPanel);
-        }
 
+        if (!(selectedObject == null))
+        {
+            for (int i = 0; i < selectedObject.properties.getSize(); i++) {
+                JPanel componentPanel = selectedObject.properties.elementAt(i).panel;
+                componentPanel.setBackground(bg_color);
+                componentPanel.setForeground(fg_color);
+                tempPanel.add(componentPanel);
+            }
+        }
+        tempPanel.setBackground(bg_color);
+        tempPanel.setForeground(fg_color);
         scrollPane = new JScrollPane(tempPanel,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -419,5 +451,27 @@ public class MainProgram extends JFrame {
             if (tabTitle.equals(title)) return i;
         }
         return -1;
+    }
+    public void updateColor(){
+        // updating the colors of objects list
+        objectsList.setBackground(bg_color);
+        objectsList.setForeground(fg_color);
+        // updating the colors of debug Panel
+        debugList.setBackground(bg_color);
+        debugList.setForeground(fg_color);
+        // updating the colors of files Panel
+        projectFilesList.setBackground(bg_color);
+        projectFilesList.setForeground(fg_color);
+
+        tempPanel.setBackground(bg_color);
+        tempPanel.setForeground(fg_color);
+
+        if (!(selectedObject == null))
+        {
+            for (int i=0; i<selectedObject.properties.getSize(); i++){
+                selectedObject.properties.getElementAt(i).panel.setBackground(bg_color);
+                selectedObject.properties.getElementAt(i).panel.setForeground(fg_color);
+            }
+        }
     }
 }

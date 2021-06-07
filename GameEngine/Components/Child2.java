@@ -24,4 +24,16 @@ public class Child2 extends GameComponent {
     public String toString() {
         return class5 + "\n" + test + "\n" + class7;
     }
+
+    @Override
+    public void Start() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void Update() {
+        // TODO Auto-generated method stub
+        
+    }
 }

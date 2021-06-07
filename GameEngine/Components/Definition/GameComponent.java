@@ -19,28 +19,35 @@ public abstract class GameComponent {
     // x and y coordinates of the object
     protected int x_pos, y_pos;
     public JPanel panel;
-    protected ArrayList<JTextField> textFieldlist;
-    protected ArrayList<JCheckBox> checkBoxes;
-    protected Field[] fieldsID;
+    protected ArrayList<JTextField> textFieldlist;  //ArrayList to store TextFields
+    protected ArrayList<JCheckBox> checkBoxes;      //ArrayList to store checkboxes
+    protected Field[] fieldsID;   //Field Array tos store fields references
     public boolean removable;
 
-    public GameComponent() {
+    public GameComponent() 
+    {
+        //Initializing declared instances.
         panel = new JPanel();
         textFieldlist = new ArrayList<JTextField>();
         checkBoxes = new ArrayList<JCheckBox>();
+        fieldsID = this.getClass().getDeclaredFields();
+
         String className = this.getClass().getSimpleName();
         if (!(GameManager.classNameModel.contains(className) || className.equals("AddComponent")
-                || className.equals("Transform"))){
+                || className.equals("Transform")))
+        {
             GameManager.classNameModel.addElement(this);
-
         }
         this.removable = true;
     }
 
-    public void createPanel() {
-        fieldsID = this.getClass().getDeclaredFields();
-
+    public void createPanel() 
+    {
         panel.setLayout(null);
+        if (MainProgram.bg_color!=null)
+            panel.setBackground(MainProgram.bg_color);
+        if (MainProgram.fg_color!=null)
+            panel.setForeground(MainProgram.fg_color);
         // Setting size (specially Height) to accomodate all fields.
         panel.setBounds(0, 0, 270, 50 * fieldsID.length);
         panel.setPreferredSize(new Dimension(270, 50 * fieldsID.length));
@@ -48,6 +55,7 @@ public abstract class GameComponent {
         Border frameBorder = BorderFactory.createLineBorder(Color.black, 1);
         panel.setBorder(frameBorder);
 
+        //close button functionality
         if (this.removable) {
             // setting closeButton
             JButton closeButton = new JButton();
@@ -63,22 +71,33 @@ public abstract class GameComponent {
             className.setFont(new Font("Times New Roman", Font.BOLD, 15));
             panel.add(className);
         }
+        
 
-        for (int i = 0; i < fieldsID.length; i++) {
+        //looping through all the fields to create respective textboxes and checkboxes.
+        for (int i = 0; i < fieldsID.length; i++) 
+        {
+            //Field label to display field name
             JLabel label = new JLabel(fieldsID[i].getName());
             label.setBounds(30, 30 * (i + 1) + 10, 100, 20);
             panel.add(label);
 
-            try {
 
-                if (fieldsID[i].get(this) instanceof String) {
+            try 
+            {
+                if (fieldsID[i].get(this) instanceof String) 
+                {
+                    //If the returned field value is String, then a textfield will be created
                     JTextField fieldValue = new JTextField((String) fieldsID[i].get(this));
                     fieldValue.setBounds(130, 30 * (i + 1) + 10, 100, 20);
                     fieldValue.addActionListener(e -> UpdateValues(this.getClass().getSimpleName()));
 
+                    //adding it to array list and panel
                     textFieldlist.add(fieldValue);
                     panel.add(fieldValue);
-                } else if (fieldsID[i].get(this) instanceof Integer) {
+                } else if (fieldsID[i].get(this) instanceof Integer) 
+                {
+                    //If the returned field value is String,
+                    //then a textfield with only integers entrance will be created
                     JTextField fieldValue = new JTextField();
                     fieldValue.setBounds(130, 30 * (i + 1) + 10, 100, 20);
                     fieldValue.setText(fieldsID[i].get(this).toString());
@@ -86,23 +105,28 @@ public abstract class GameComponent {
 
                     PlainDocument doc = (PlainDocument) fieldValue.getDocument();
                     doc.setDocumentFilter(new MyIntFilter());
-
+                    
+                    //adding it to array list and panel
                     textFieldlist.add(fieldValue);
                     panel.add(fieldValue);
-                } else if (fieldsID[i].get(this) instanceof Boolean) {
+                } else if (fieldsID[i].get(this) instanceof Boolean) 
+                {
+                    //If the returned field value is Boolean,
+                    //then a checkBox will be created.
                     JCheckBox checkBox = new JCheckBox();
                     checkBox.setSelected((boolean) fieldsID[i].get(this));
                     checkBox.setBounds(126, 30 * (i + 1) + 10, 50, 20);
                     checkBox.addActionListener(e -> UpdateValues(this.getClass().getSimpleName()));
 
+                    //adding it to array list and panel
                     checkBoxes.add(checkBox);
                     panel.add(checkBox);
                 }
 
             } catch (IllegalArgumentException e) {
-                e.printStackTrace();
+                GameManager.debugModel.addElement("Field not found...");
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                GameManager.debugModel.addElement("Access to this field is not possible...");
             }
         }
     }
@@ -117,15 +141,17 @@ public abstract class GameComponent {
         return this.getClass().getConstructor().newInstance();
     }
 
-    public void Start() {
-
-    }
-
-    public void UpdateValues(String classString) {
-        int propIndex = 0;
-        int checkBoxFieldCount = 0;
+    public abstract void Start();
+    public abstract void Update();
+    public void UpdateValues(String classString) 
+    {
+        //To get property index of certain gameobject
+        int propIndex = 0;  
+        //Counters
+        int checkBoxFieldCount = 0;   
         int textFieldCount = 0;
 
+        //looping through all the properties of gameobject to get property index.
         for (int i = 0; i < MainProgram.selectedObject.properties.getSize(); i++) {
             if (MainProgram.selectedObject.properties.getElementAt(i).getClass().getSimpleName() == classString) {
                 propIndex = i;
@@ -133,42 +159,44 @@ public abstract class GameComponent {
             }
         }
 
-        try {
-            for (int i = 0; i < fieldsID.length; i++) {
-                if (fieldsID[i].get(this) instanceof String) {
+        try 
+        {
+            //looping through the fieldID's and arraylists to update the fields.
+            for (int i = 0; i < fieldsID.length; i++) 
+            {
+                
+                if (fieldsID[i].get(this) instanceof String) 
+                {
                     fieldsID[i].set(MainProgram.selectedObject.properties.getElementAt(propIndex),
-                            textFieldlist.get(textFieldCount).getText());
+                                    textFieldlist.get(textFieldCount).getText());
                     textFieldCount++;
-                } else if (fieldsID[i].get(this) instanceof Integer) {
+                } else if (fieldsID[i].get(this) instanceof Integer) 
+                {
                     int value;
                     try {
                         value = (textFieldlist.get(textFieldCount).getText() != "")
                                 ? Integer.parseInt(textFieldlist.get(textFieldCount).getText())
                                 : 0;
                     } catch (Exception e) {
-                        System.out.println("No input... Setting to 0.");
+                        GameManager.debugModel.addElement("No input in integer field... Setting to 0.");
                         value = 0;
                     }
                     fieldsID[i].set(MainProgram.selectedObject.properties.getElementAt(propIndex), value);
                     textFieldCount++;
-                } else if (fieldsID[i].get(this) instanceof Boolean) {
+                } else if (fieldsID[i].get(this) instanceof Boolean) 
+                {
                     fieldsID[i].set(MainProgram.selectedObject.properties.getElementAt(propIndex),
                             checkBoxes.get(checkBoxFieldCount).isSelected());
                     checkBoxFieldCount++;
                 }
             }
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            GameManager.debugModel.addElement("Field not found...");
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            GameManager.debugModel.addElement("Access to this field is not possible...");
         }
         System.out.println(MainProgram.selectedObject.properties.getElementAt(propIndex).toString());
-        RereshFrame();
+        Test.main.refreshFrame();
     }
 
-    void RereshFrame() {
-        Test.main.invalidate();
-        Test.main.validate();
-        Test.main.repaint();
-    }
 }

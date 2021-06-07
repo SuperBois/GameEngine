@@ -10,6 +10,7 @@ public class GameManager {
     public static DefaultListModel<GameObject>  objectsModel = new DefaultListModel<GameObject>();
     static DefaultListModel<Object> projectFilesModel = new DefaultListModel<Object>();
     public static DefaultListModel<GameComponent>  classNameModel = new DefaultListModel<GameComponent>();
+    public static DefaultListModel<String> debugModel = new DefaultListModel<String>();
     
     public static void getFilesPaths(String projectPath)
     {
