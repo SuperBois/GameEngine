@@ -30,4 +30,18 @@ public class Transform extends GameComponent{
     public String toString() {
         return name + "\n" + pos_x + "\n" + pos_y;
     }
+    @Override
+    public void Start() {
+        // TODO Auto-generated method stub
+        
+    }
+    @Override
+    public void Update() {
+        // TODO Auto-generated method stub
+        
+    }
+    @Override
+    public GameComponent newInstance() {
+        return new Transform();
+    }
 }

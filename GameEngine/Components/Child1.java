@@ -26,19 +26,28 @@ public class Child1 extends GameComponent {
         this.class5 = 5;
         createPanel();
     }
-    // @Override
-    // public void Update() 
-    // {
-    //     class1 = textFieldlist.get(0).getText();
-    //     class2 = textFieldlist.get(1).getText();
-    //     class3 = textFieldlist.get(2).getText();
-    //     class4 = checkBoxes.get(0).isSelected();
-    //     class5 = Integer.parseInt(textFieldlist.get(3).getText());
-    //     System.out.println(this);
-    // }
+    
     @Override
     public String toString() 
     {
         return class1 + "\n" + class2 + "\n" + class3 + "\n" + class4 + "\n" + class5 ;
     }
+
+    @Override
+    public void Start() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void Update() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public GameComponent newInstance() {
+        return new Child1();
+    }
+
 }

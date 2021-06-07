@@ -14,15 +14,15 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-public class GameComponent {
+public abstract class GameComponent implements Cloneable{
 
     // x and y coordinates of the object
     protected int x_pos, y_pos;
     public JPanel panel;
     public ArrayList<JLabel> labels;
-    public ArrayList<JTextField> textFieldlist;  //ArrayList to store TextFields
-    public ArrayList<JCheckBox> checkBoxes;      //ArrayList to store checkboxes
-    public Field[] fieldsID;   //Field Array tos store fields references
+    protected ArrayList<JTextField> textFieldlist;  //ArrayList to store TextFields
+    protected ArrayList<JCheckBox> checkBoxes;      //ArrayList to store checkboxes
+    protected Field[] fieldsID;   //Field Array tos store fields references
     public boolean removable;
 
     public GameComponent() 
@@ -30,17 +30,24 @@ public class GameComponent {
         //Initializing declared instances.
         panel = new JPanel();
         textFieldlist = new ArrayList<JTextField>();
-        labels = new ArrayList<JLabel>();
         checkBoxes = new ArrayList<JCheckBox>();
+        labels = new ArrayList<JLabel>();
         fieldsID = this.getClass().getDeclaredFields();
 
         String className = this.getClass().getSimpleName();
-        if (!(GameManager.classNameModel.contains(className) || className.equals("AddComponent")
-                || className.equals("Transform")))
-        {
+        if (!(isInClassNameModel(className) || className.equals("AddComponent")
+                || className.equals("Transform"))) {
             GameManager.classNameModel.addElement(this);
         }
         this.removable = true;
+    }
+
+    private boolean isInClassNameModel(String className) {
+        for (int i =0; i<GameManager.classNameModel.getSize(); i++){
+            if (className.equals(GameManager.classNameModel.elementAt(i).getClass().getSimpleName()))
+                return true;
+        }
+        return false;
     }
 
     public void createPanel() 
@@ -59,9 +66,9 @@ public class GameComponent {
             // setting closeButton
             JButton closeButton = new JButton();
             closeButton.setIcon(new ImageIcon(getClass().getResource("..\\Icons\\cross.png")));
-            closeButton.setBackground(Color.DARK_GRAY);
             closeButton.addActionListener(e->remove(this));
             closeButton.setBounds(300 - 50, 5, 20, 20);
+            closeButton.setBackground(Color.darkGray);
             panel.add(closeButton);
 
             // Setting Jlabel to display class name.
@@ -84,7 +91,6 @@ public class GameComponent {
             labels.add(label);
             panel.add(label);
 
-
             try 
             {
                 if (fieldsID[i].get(this) instanceof String) 
@@ -93,7 +99,7 @@ public class GameComponent {
                     JTextField fieldValue = new JTextField((String) fieldsID[i].get(this));
                     fieldValue.setBounds(130, 30 * (i + 1) + 10, 100, 20);
                     fieldValue.setForeground(Color.black);
-                    fieldValue.addActionListener(e -> Update(this.getClass().getSimpleName()));
+                    fieldValue.addActionListener(e -> UpdateValues(this.getClass().getSimpleName()));
 
                     //adding it to array list and panel
                     textFieldlist.add(fieldValue);
@@ -104,9 +110,9 @@ public class GameComponent {
                     //then a textfield with only integers entrance will be created
                     JTextField fieldValue = new JTextField();
                     fieldValue.setBounds(130, 30 * (i + 1) + 10, 100, 20);
-                    fieldValue.setForeground(Color.BLACK);
+                    fieldValue.setForeground(Color.black);
                     fieldValue.setText(fieldsID[i].get(this).toString());
-                    fieldValue.addActionListener(e -> Update(this.getClass().getSimpleName()));
+                    fieldValue.addActionListener(e -> UpdateValues(this.getClass().getSimpleName()));
 
                     PlainDocument doc = (PlainDocument) fieldValue.getDocument();
                     doc.setDocumentFilter(new MyIntFilter());
@@ -121,7 +127,7 @@ public class GameComponent {
                     JCheckBox checkBox = new JCheckBox();
                     checkBox.setSelected((boolean) fieldsID[i].get(this));
                     checkBox.setBounds(130, 30 * (i + 1) + 10, 20, 15);
-                    checkBox.addActionListener(e -> Update(this.getClass().getSimpleName()));
+                    checkBox.addActionListener(e -> UpdateValues(this.getClass().getSimpleName()));
 
                     //adding it to array list and panel
                     checkBoxes.add(checkBox);
@@ -146,12 +152,10 @@ public class GameComponent {
         return this.getClass().getConstructor().newInstance();
     }
 
-    public void Start() 
-    {
+    public abstract void Start();
+    public abstract void Update();
 
-    }
-
-    public void Update(String classString) 
+    public void UpdateValues(String classString) 
     {
         //To get property index of certain gameobject
         int propIndex = 0;  
@@ -207,4 +211,5 @@ public class GameComponent {
         Test.main.refreshFrame();
     }
 
+    public abstract GameComponent newInstance();
 }

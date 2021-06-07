@@ -89,7 +89,7 @@ public class MainProgram extends JFrame {
         objectsList.setCellRenderer(new ObjectRenderer());
 
         menuBar = new JMenuBar();
-        fg_color = Color.red;
+        fg_color = Color.black;
         bg_color = Color.white;
 
         // Making the frame/ window
@@ -118,6 +118,7 @@ public class MainProgram extends JFrame {
         
         this.add(tabbedPane);
         this.pack();
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         this.setVisible(true);
     }
 
@@ -313,11 +314,11 @@ public class MainProgram extends JFrame {
 
         // ---------------Preparing the ribbon Panel
         JPanel ribbon = new JPanel();
-        ribbon.setLayout(new GridLayout(1, 10));
+        ribbon.setLayout(null);
         // ribbon.setBackground(Color.cyan);
         // Button to test the other function
         JButton addButton = new JButton();
-        addButton.setSize(50, 30);
+        addButton.setBounds(5, 0, 150, 30);
         addButton.setText("Add Object");
         addButton.addActionListener(e -> addObject());
         ribbon.add(addButton);
@@ -326,20 +327,21 @@ public class MainProgram extends JFrame {
         ribbon.add(new JLabel());
         // Button to play the game
         JButton play = new JButton();
-        play.setSize(50, 30);
-        play.setText("Play");
+        play.setBounds(850, 0, 30, 30);
+        // play.setIcon(new ImageIcon(getClass().getResource("Icons\\play.png")));
+        play.setBackground(Color.black);
         // play.addActionListener(e -> GameManager.Play());
         ribbon.add(play);
         // Button to pause the game
         JButton pause = new JButton();
-        pause.setSize(50, 30);
-        pause.setText("Pause");
+        pause.setBounds(880, 0, 30, 30);
+        pause.setBackground(Color.BLACK);
         // pause.addActionListener(e -> addObject());
         ribbon.add(pause);
         // Button to stop the game
         JButton stop = new JButton();
-        stop.setSize(50, 30);
-        stop.setText("Stop");
+        stop.setBounds(910, 0, 30, 30);
+        stop.setBackground(Color.black);
         // stop.addActionListener(e -> addObject());
         ribbon.add(stop);
         // Label to add space
@@ -347,7 +349,7 @@ public class MainProgram extends JFrame {
         ribbon.add(new JLabel());
         // Button to stop the game
         JButton CustomizeEditor = new JButton();
-        CustomizeEditor.setSize(50, 30);
+        CustomizeEditor.setBounds(1760, 0, 150, 30);
         CustomizeEditor.setText("Customize");
         CustomizeEditor.addActionListener(e -> {
             new Customize();
@@ -368,12 +370,12 @@ public class MainProgram extends JFrame {
 
     private void addObject() {
         GameManager.objectsModel.addElement(new GameObject());
-        updateColor();
     }
 
     public void showPanelofSelected() {
         inspectorPanel.removeAll();
         tempPanel.removeAll();
+
         // changing the layout of inspector panel
         tempPanel.setLayout(new BoxLayout(tempPanel, BoxLayout.Y_AXIS));
 
@@ -383,10 +385,13 @@ public class MainProgram extends JFrame {
         {
             for (int i = 0; i < selectedObject.properties.getSize(); i++) {
                 JPanel componentPanel = selectedObject.properties.elementAt(i).panel;
+                componentPanel.setBackground(bg_color);
+                componentPanel.setForeground(fg_color);
                 tempPanel.add(componentPanel);
             }
         }
-
+        tempPanel.setBackground(bg_color);
+        tempPanel.setForeground(fg_color);
         scrollPane = new JScrollPane(tempPanel,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -462,6 +467,9 @@ public class MainProgram extends JFrame {
 
         inspectorPanel.setBackground(bg_color);
         inspectorPanel.setForeground(fg_color);
+
+        tempPanel.setBackground(bg_color);
+        tempPanel.setForeground(fg_color);
 
         for (int i = 0; i < GameManager.objectsModel.getSize(); i++ )
         {

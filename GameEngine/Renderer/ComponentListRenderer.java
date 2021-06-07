@@ -17,7 +17,7 @@ public class ComponentListRenderer extends JLabel implements ListCellRenderer<Ga
     public Component getListCellRendererComponent(JList<? extends GameComponent> list, GameComponent classObject, int index,
         boolean isSelected, boolean cellHasFocus) {
           
-        ImageIcon imageIcon = new ImageIcon("GameEngine/Icons/java.png");
+        ImageIcon imageIcon = new ImageIcon("GameEngine\\Icons\\java.png");
         setIcon(imageIcon);
 
         setText(classObject.getClass().getSimpleName());
