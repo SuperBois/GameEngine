@@ -60,7 +60,7 @@ public class NewScript extends GameComponent {
             "}\n"+
             "@Override\n"+
             "public GameComponent newInstance() {\n"+
-             "   // TODO Auto-generated method stub\n"+
+             "   // Do not modify this \n"+
              "   return new "+name+"();\n"+
            " }\n"+
             "\n"+

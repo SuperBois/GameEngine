@@ -10,10 +10,9 @@ public class Test {
         GameManager.getFilesPaths("D:\\");
         main = new MainProgram();
         // ---------------
-        
-        new Child1();
-        new Child2();
+        new SpriteRenderer();
         new NewScript();
+
         main.refreshFrame();
     }
 }

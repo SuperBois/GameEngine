@@ -18,10 +18,10 @@ import GameEngine.Panels.TextEditorPanel;
 public class MainProgram extends JFrame {
     static JPanel ribbonPanel;
     static JPanel heirarchyPanel;
-    static public JPanel inspectorPanel;
+    public static  JPanel inspectorPanel;
     static JPanel infoPanel;
     static JPanel projectFilesPanel;
-    static JPanel displayPanel;
+    public static JPanel displayPanel;
     static JMenuBar menuBar;
 
     // Record of the debug statements on the debug console
@@ -318,21 +318,27 @@ public class MainProgram extends JFrame {
           play.setIcon(new ImageIcon("GameEngine\\Icons\\play.png"));
           play.setBackground(Color.black);
           play.setFocusable(false);
-          // play.addActionListener(e -> GameManager.Play());
+          play.addActionListener(e -> {
+              play.setEnabled(false);
+              GameManager.Play();});
           centerPanel.add(play);
           // Button to pause the game
           JButton pause = new JButton();
           pause.setIcon(new ImageIcon("GameEngine\\Icons\\pause.png"));
           pause.setBackground(Color.BLACK);
           pause.setFocusable(false);
-          // pause.addActionListener(e -> addObject());
+          pause.addActionListener(e -> {
+            // play.setEnabled(true);  
+            GameManager.running =false;});
           centerPanel.add(pause);
           // Button to stop the game
           JButton stop = new JButton();
           stop.setIcon(new ImageIcon("GameEngine\\Icons\\stop.png"));
           stop.setBackground(Color.black);
           stop.setFocusable(false);
-          // stop.addActionListener(e -> addObject());
+          stop.addActionListener(e -> {
+            play.setEnabled(true); 
+            GameManager.stop = true;});
           centerPanel.add(stop);
         centerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         centerPanel.setPreferredSize(new Dimension(400, 50));

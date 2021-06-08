@@ -4,54 +4,56 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.text.PlainDocument;
+import javax.swing.filechooser.*;
 
 import GameEngine.GameManager;
 import GameEngine.MainProgram;
 import GameEngine.Test;
+import GameEngine.Components.SpriteRenderer;
+import GameEngine.Components.Filters.MyFloatFilter;
 import GameEngine.Components.Filters.MyIntFilter;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-public abstract class GameComponent implements Cloneable{
+public abstract class GameComponent {
 
     // x and y coordinates of the object
     protected int x_pos, y_pos;
     public JPanel panel;
     public ArrayList<JLabel> labels;
-    protected ArrayList<JTextField> textFieldlist;  //ArrayList to store TextFields
-    protected ArrayList<JCheckBox> checkBoxes;      //ArrayList to store checkboxes
-    protected Field[] fieldsID;   //Field Array tos store fields references
+    protected ArrayList<JTextField> textFieldlist; // ArrayList to store TextFields
+    protected ArrayList<JCheckBox> checkBoxes; // ArrayList to store checkboxes
+    protected ArrayList<JButton> buttons; // ArrayList to store all buttons
+    protected Field[] fieldsID; // Field Array tos store fields references
     public boolean removable;
 
-    public GameComponent() 
-    {
-        //Initializing declared instances.
+    public GameComponent() {
+        // Initializing declared instances.
         panel = new JPanel();
         textFieldlist = new ArrayList<JTextField>();
         checkBoxes = new ArrayList<JCheckBox>();
         labels = new ArrayList<JLabel>();
+        buttons = new ArrayList<JButton>();
         fieldsID = this.getClass().getDeclaredFields();
 
         String className = this.getClass().getSimpleName();
-        if (!(isInClassNameModel(className) || className.equals("AddComponent")
-                || className.equals("Transform"))) {
+        if (!(isInClassNameModel(className) || className.equals("AddComponent") || className.equals("Transform"))) {
             GameManager.classNameModel.addElement(this);
         }
         this.removable = true;
     }
 
     private boolean isInClassNameModel(String className) {
-        for (int i =0; i<GameManager.classNameModel.getSize(); i++){
+        for (int i = 0; i < GameManager.classNameModel.getSize(); i++) {
             if (className.equals(GameManager.classNameModel.elementAt(i).getClass().getSimpleName()))
                 return true;
         }
         return false;
     }
 
-    public void createPanel() 
-    {
+    public void createPanel() {
         panel.setLayout(null);
         panel.setBackground(Test.main.bg_color);
         // Setting size (specially Height) to accomodate all fields.
@@ -61,12 +63,12 @@ public abstract class GameComponent implements Cloneable{
         Border frameBorder = BorderFactory.createLineBorder(Color.black, 1);
         panel.setBorder(frameBorder);
 
-        //close button functionality
+        // close button functionality
         if (this.removable) {
             // setting closeButton
             JButton closeButton = new JButton();
             closeButton.setIcon(new ImageIcon(getClass().getResource("..\\Icons\\cross.png")));
-            closeButton.addActionListener(e->remove(this));
+            closeButton.addActionListener(e -> remove(this));
             closeButton.setBounds(300 - 50, 5, 20, 20);
             closeButton.setBackground(Color.darkGray);
             panel.add(closeButton);
@@ -79,35 +81,30 @@ public abstract class GameComponent implements Cloneable{
             labels.add(className);
             panel.add(className);
         }
-        
 
-        //looping through all the fields to create respective textboxes and checkboxes.
-        for (int i = 0; i < fieldsID.length; i++) 
-        {
-            //Field label to display field name
+        // looping through all the fields to create respective textboxes and checkboxes.
+        for (int i = 0; i < fieldsID.length; i++) {
+            // Field label to display field name
             JLabel label = new JLabel(fieldsID[i].getName());
             label.setBounds(30, 30 * (i + 1) + 10, 100, 20);
             label.setForeground(Test.main.fg_color);
             labels.add(label);
             panel.add(label);
 
-            try 
-            {
-                if (fieldsID[i].get(this) instanceof String) 
-                {
-                    //If the returned field value is String, then a textfield will be created
+            try {
+                if (fieldsID[i].get(this) instanceof String) {
+                    // If the returned field value is String, then a textfield will be created
                     JTextField fieldValue = new JTextField((String) fieldsID[i].get(this));
                     fieldValue.setBounds(130, 30 * (i + 1) + 10, 100, 20);
                     fieldValue.setForeground(Color.black);
                     fieldValue.addActionListener(e -> UpdateValues(this.getClass().getSimpleName()));
 
-                    //adding it to array list and panel
+                    // adding it to array list and panel
                     textFieldlist.add(fieldValue);
                     panel.add(fieldValue);
-                } else if (fieldsID[i].get(this) instanceof Integer) 
-                {
-                    //If the returned field value is String,
-                    //then a textfield with only integers entrance will be created
+                } else if (fieldsID[i].get(this) instanceof Integer) {
+                    // If the returned field value is String,
+                    // then a textfield with only integers entrance will be created
                     JTextField fieldValue = new JTextField();
                     fieldValue.setBounds(130, 30 * (i + 1) + 10, 100, 20);
                     fieldValue.setForeground(Color.black);
@@ -116,22 +113,56 @@ public abstract class GameComponent implements Cloneable{
 
                     PlainDocument doc = (PlainDocument) fieldValue.getDocument();
                     doc.setDocumentFilter(new MyIntFilter());
-                    
-                    //adding it to array list and panel
+
+                    // adding it to array list and panel
                     textFieldlist.add(fieldValue);
                     panel.add(fieldValue);
-                } else if (fieldsID[i].get(this) instanceof Boolean) 
-                {
-                    //If the returned field value is Boolean,
-                    //then a checkBox will be created.
+                } else if (fieldsID[i].get(this) instanceof Boolean) {
+                    // If the returned field value is Boolean,
+                    // then a checkBox will be created.
                     JCheckBox checkBox = new JCheckBox();
                     checkBox.setSelected((boolean) fieldsID[i].get(this));
                     checkBox.setBounds(130, 30 * (i + 1) + 10, 20, 15);
                     checkBox.addActionListener(e -> UpdateValues(this.getClass().getSimpleName()));
 
-                    //adding it to array list and panel
+                    // adding it to array list and panel
                     checkBoxes.add(checkBox);
                     panel.add(checkBox);
+                } else if (fieldsID[i].get(this) instanceof JLabel) {
+                    // If the returned field value is String, then a textfield will be created
+                    JButton selectImageButton = new JButton("Select Image");
+                    selectImageButton.setBounds(130, 30 * (i + 1) + 10, 130, 20);
+                    selectImageButton.setForeground(Color.black);
+                    selectImageButton.addActionListener(e -> chooseImage());
+
+                    // adding it to array list and panel
+                    buttons.add(selectImageButton);
+                    panel.add(selectImageButton);
+                } else if (fieldsID[i].get(this) instanceof Color) {
+                    // If the returned field value is String, then a textfield will be created
+                    JButton selectColorButton = new JButton("Select Color");
+                    selectColorButton.setBounds(130, 30 * (i + 1) + 10, 130, 20);
+                    selectColorButton.setForeground(Color.black);
+                    selectColorButton.addActionListener(e -> chooseColor());
+
+                    // adding it to array list and panel
+                    buttons.add(selectColorButton);
+                    panel.add(selectColorButton);
+                } else if (fieldsID[i].get(this) instanceof Float) {
+                    // If the returned field value is String,
+                    // then a textfield with only floats entrance will be created
+                    JTextField fieldValue = new JTextField();
+                    fieldValue.setBounds(130, 30 * (i + 1) + 10, 100, 20);
+                    fieldValue.setForeground(Color.black);
+                    fieldValue.setText(fieldsID[i].get(this).toString());
+                    fieldValue.addActionListener(e -> UpdateValues(this.getClass().getSimpleName()));
+
+                    PlainDocument doc = (PlainDocument) fieldValue.getDocument();
+                    doc.setDocumentFilter(new MyFloatFilter());
+
+                    // adding it to array list and panel
+                    textFieldlist.add(fieldValue);
+                    panel.add(fieldValue);
                 }
 
             } catch (IllegalArgumentException e) {
@@ -140,6 +171,29 @@ public abstract class GameComponent implements Cloneable{
                 GameManager.debugModel.addElement("Access to this field is not possible...");
             }
         }
+    }
+
+    private void chooseImage() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setMultiSelectionEnabled(false);
+        fileChooser.removeChoosableFileFilter(fileChooser.getAcceptAllFileFilter());
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Image files", "png", "jpg", "jpeg", "bmp"));
+        int response = fileChooser.showOpenDialog(null);
+        if (response == JFileChooser.APPROVE_OPTION) {
+            System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
+            for (int i = 0; i < MainProgram.selectedObject.properties.getSize(); i++) {
+                if (MainProgram.selectedObject.properties.elementAt(i).getClass().getSimpleName()
+                        .equals("SpriteRenderer")) {
+                    // sets the image as icon of the label of the element
+                    SpriteRenderer spriteRenderer = (SpriteRenderer) MainProgram.selectedObject.properties.elementAt(i);
+                    spriteRenderer.spriteLabel.setIcon(new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath()));
+                }
+            }
+        }
+    }
+
+    private void chooseColor() {
+
     }
 
     private void remove(GameComponent gameComponent) {
@@ -153,17 +207,17 @@ public abstract class GameComponent implements Cloneable{
     }
 
     public abstract void Start();
+
     public abstract void Update();
 
-    public void UpdateValues(String classString) 
-    {
-        //To get property index of certain gameobject
-        int propIndex = 0;  
-        //Counters
-        int checkBoxFieldCount = 0;   
+    public void UpdateValues(String classString) {
+        // To get property index of certain gameobject
+        int propIndex = 0;
+        // Counters
+        int checkBoxFieldCount = 0;
         int textFieldCount = 0;
 
-        //looping through all the properties of gameobject to get property index.
+        // looping through all the properties of gameobject to get property index.
         for (int i = 0; i < MainProgram.selectedObject.properties.getSize(); i++) {
             if (MainProgram.selectedObject.properties.getElementAt(i).getClass().getSimpleName() == classString) {
                 propIndex = i;
@@ -171,19 +225,15 @@ public abstract class GameComponent implements Cloneable{
             }
         }
 
-        try 
-        {
-            //looping through the fieldID's and arraylists to update the fields.
-            for (int i = 0; i < fieldsID.length; i++) 
-            {
-                
-                if (fieldsID[i].get(this) instanceof String) 
-                {
+        try {
+            // looping through the fieldID's and arraylists to update the fields.
+            for (int i = 0; i < fieldsID.length; i++) {
+
+                if (fieldsID[i].get(this) instanceof String) {
                     fieldsID[i].set(MainProgram.selectedObject.properties.getElementAt(propIndex),
-                                    textFieldlist.get(textFieldCount).getText());
+                            textFieldlist.get(textFieldCount).getText());
                     textFieldCount++;
-                } else if (fieldsID[i].get(this) instanceof Integer) 
-                {
+                } else if (fieldsID[i].get(this) instanceof Integer) {
                     int value;
                     try {
                         value = (textFieldlist.get(textFieldCount).getText() != "")
@@ -195,8 +245,37 @@ public abstract class GameComponent implements Cloneable{
                     }
                     fieldsID[i].set(MainProgram.selectedObject.properties.getElementAt(propIndex), value);
                     textFieldCount++;
-                } else if (fieldsID[i].get(this) instanceof Boolean) 
-                {
+
+                    if (MainProgram.selectedObject.properties.getElementAt(propIndex).getClass().getSimpleName()
+                            .equals("Transform")) {
+                        SpriteRenderer spriteRenderer = null;
+                        for (int index = 0; index < MainProgram.selectedObject.properties.getSize(); index++) {
+                            if (MainProgram.selectedObject.properties.getElementAt(index).getClass().getSimpleName()
+                                    .equals("SpriteRenderer")) {
+                                spriteRenderer = (SpriteRenderer) MainProgram.selectedObject.properties
+                                        .getElementAt(index);
+                            }
+                        }
+                        if (spriteRenderer != null) {
+                            if (fieldsID[i].getName().equals("pos_x")) {
+                                spriteRenderer.spriteLabel.setBounds(value, spriteRenderer.spriteLabel.getY(),
+                                        spriteRenderer.spriteLabel.getWidth(), spriteRenderer.spriteLabel.getHeight());
+                            } else if (fieldsID[i].getName().equals("pos_y")) {
+                                spriteRenderer.spriteLabel.setBounds(spriteRenderer.spriteLabel.getX(), value,
+                                        spriteRenderer.spriteLabel.getWidth(), spriteRenderer.spriteLabel.getHeight());
+                            } else if (fieldsID[i].getName().equals("scale_x")) {
+                                spriteRenderer.spriteLabel.setSize(spriteRenderer.spriteLabel.getWidth() * value,
+                                        spriteRenderer.spriteLabel.getHeight());
+                            } else if (fieldsID[i].getName().equals("scale_y")) {
+                                spriteRenderer.spriteLabel.setSize(50 , 50* value);
+                            }
+                        }
+                    }
+                } else if (fieldsID[i].get(this) instanceof Boolean) {
+                    fieldsID[i].set(MainProgram.selectedObject.properties.getElementAt(propIndex),
+                            checkBoxes.get(checkBoxFieldCount).isSelected());
+                    checkBoxFieldCount++;
+                } else if (fieldsID[i].get(this) instanceof JLabel) {
                     fieldsID[i].set(MainProgram.selectedObject.properties.getElementAt(propIndex),
                             checkBoxes.get(checkBoxFieldCount).isSelected());
                     checkBoxFieldCount++;
@@ -207,7 +286,6 @@ public abstract class GameComponent implements Cloneable{
         } catch (IllegalAccessException e) {
             GameManager.debugModel.addElement("Access to this field is not possible...");
         }
-        System.out.println(MainProgram.selectedObject.properties.getElementAt(propIndex).toString());
         Test.main.refreshFrame();
     }
 
