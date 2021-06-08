@@ -199,7 +199,7 @@ public class MainProgram extends JFrame {
         heirarchyPanel.setLayout(new GridLayout(1, 1));
         ribbonPanel.setLayout(new GridLayout(1, 1));
         // SETTING THE SIZE OF PANELS
-        ribbonPanel.setPreferredSize(new Dimension(100, 30));
+        ribbonPanel.setPreferredSize(new Dimension(100, 40));
         heirarchyPanel.setPreferredSize(new Dimension(300, 100));
         inspectorPanel.setPreferredSize(new Dimension(300, 100));
         infoPanel.setPreferredSize(new Dimension(100, 200));
@@ -313,49 +313,65 @@ public class MainProgram extends JFrame {
         // ----------------------PREPARES THE RIBBON PANEL AND THE MENU BAR
 
         // ---------------Preparing the ribbon Panel
-        JPanel ribbon = new JPanel();
-        ribbon.setLayout(null);
-        // ribbon.setBackground(Color.cyan);
-        // Button to test the other function
-        JButton addButton = new JButton();
-        addButton.setBounds(5, 0, 150, 30);
-        addButton.setText("Add Object");
-        addButton.addActionListener(e -> addObject());
-        ribbon.add(addButton);
-        // Label to add space
-        ribbon.add(new JLabel());
-        ribbon.add(new JLabel());
-        // Button to play the game
+        JPanel centerPanel = new JPanel();
         JButton play = new JButton();
-        play.setBounds(850, 0, 30, 30);
-        // play.setIcon(new ImageIcon(getClass().getResource("Icons\\play.png")));
-        play.setBackground(Color.black);
-        // play.addActionListener(e -> GameManager.Play());
-        ribbon.add(play);
-        // Button to pause the game
-        JButton pause = new JButton();
-        pause.setBounds(880, 0, 30, 30);
-        pause.setBackground(Color.BLACK);
-        // pause.addActionListener(e -> addObject());
-        ribbon.add(pause);
-        // Button to stop the game
-        JButton stop = new JButton();
-        stop.setBounds(910, 0, 30, 30);
-        stop.setBackground(Color.black);
-        // stop.addActionListener(e -> addObject());
-        ribbon.add(stop);
+          play.setIcon(new ImageIcon("GameEngine\\Icons\\play.png"));
+          play.setBackground(Color.black);
+          play.setFocusable(false);
+          // play.addActionListener(e -> GameManager.Play());
+          centerPanel.add(play);
+          // Button to pause the game
+          JButton pause = new JButton();
+          pause.setIcon(new ImageIcon("GameEngine\\Icons\\pause.png"));
+          pause.setBackground(Color.BLACK);
+          pause.setFocusable(false);
+          // pause.addActionListener(e -> addObject());
+          centerPanel.add(pause);
+          // Button to stop the game
+          JButton stop = new JButton();
+          stop.setIcon(new ImageIcon("GameEngine\\Icons\\stop.png"));
+          stop.setBackground(Color.black);
+          stop.setFocusable(false);
+          // stop.addActionListener(e -> addObject());
+          centerPanel.add(stop);
+        centerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centerPanel.setPreferredSize(new Dimension(400, 50));
+        centerPanel.setMaximumSize(new Dimension(400, 50));
         // Label to add space
-        ribbon.add(new JLabel());
-        ribbon.add(new JLabel());
-        // Button to stop the game
-        JButton CustomizeEditor = new JButton();
-        CustomizeEditor.setBounds(1760, 0, 150, 30);
-        CustomizeEditor.setText("Customize");
+        JPanel leftPanel = new JPanel();
+        leftPanel.setSize(new Dimension(100,30));
+        leftPanel.setMaximumSize(new Dimension(100,30));
+        leftPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        JButton addButton = new JButton("Add Object");
+        addButton.addActionListener(e -> addObject());
+        
+        leftPanel.add(addButton);
+
+        JPanel leftspacePanel = new JPanel();
+        leftspacePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        
+        JPanel rightspacePanel = new JPanel();
+        rightspacePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        
+        JPanel rightPanel = new JPanel();
+        rightPanel.setSize(new Dimension(100,30));
+        rightPanel.setMaximumSize(new Dimension(100,30));
+        rightPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+
+        JButton CustomizeEditor = new JButton("Customize");
         CustomizeEditor.addActionListener(e -> {
             new Customize();
         });
-        ribbon.add(CustomizeEditor);
+
+        rightPanel.add(CustomizeEditor);
+        JPanel ribbon = new JPanel();
+        ribbon.setLayout(new BoxLayout(ribbon, BoxLayout.X_AXIS));
         // ----------------------------------------------------
+        ribbon.add(leftPanel);
+        ribbon.add(leftspacePanel);
+        ribbon.add(centerPanel);
+        ribbon.add(rightspacePanel);
+        ribbon.add(rightPanel);
         ribbonPanel.add(ribbon);
         // ---------------------------------------------------
         // ------------------Adding Dragging option to display Panel
