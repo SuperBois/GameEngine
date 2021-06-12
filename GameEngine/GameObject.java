@@ -1,17 +1,24 @@
 package GameEngine;
 
-import javax.swing.*;
 
+import java.util.*;
 import GameEngine.Components.AddComponent;
 import GameEngine.Components.Transform;
 import GameEngine.Components.Definition.GameComponent;
 
 public class GameObject{
-    public DefaultListModel<GameComponent> properties;
+    public Dictionary<String , GameComponent> properties;
+    // public DefaultListModel<GameComponent> properties;
 
     GameObject(){
-        properties = new DefaultListModel<GameComponent>();
-        this.properties.addElement(new Transform());
-        this.properties.addElement(new AddComponent());
+        properties = new Hashtable<String , GameComponent>();
+        Transform transform = new Transform();
+        transform.setGameObject(this);
+
+        AddComponent addComponent= new AddComponent();
+        addComponent.setGameObject(this);
+
+        this.properties.put("Transform", transform);
+        this.properties.put("AddComponent", addComponent);
     }
 }

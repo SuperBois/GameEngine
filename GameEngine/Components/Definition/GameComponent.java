@@ -7,6 +7,7 @@ import javax.swing.text.PlainDocument;
 import javax.swing.filechooser.*;
 
 import GameEngine.GameManager;
+import GameEngine.GameObject;
 import GameEngine.MainProgram;
 import GameEngine.Test;
 import GameEngine.Components.SpriteRenderer;
@@ -16,18 +17,19 @@ import GameEngine.Components.Filters.MyIntFilter;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 public abstract class GameComponent {
 
     // x and y coordinates of the object
-    protected int x_pos, y_pos;
-    public JPanel panel;
-    public ArrayList<JLabel> labels;
+    protected JPanel panel;
+    protected ArrayList<JLabel> labels;
     protected ArrayList<JTextField> textFieldlist; // ArrayList to store TextFields
     protected ArrayList<JCheckBox> checkBoxes; // ArrayList to store checkboxes
     protected ArrayList<JButton> buttons; // ArrayList to store all buttons
     protected Field[] fieldsID; // Field Array tos store fields references
-    public boolean removable;
+    protected boolean removable;
+    protected GameObject gameObject;
 
     public GameComponent() {
         // Initializing declared instances.
@@ -36,7 +38,7 @@ public abstract class GameComponent {
         checkBoxes = new ArrayList<JCheckBox>();
         labels = new ArrayList<JLabel>();
         buttons = new ArrayList<JButton>();
-        fieldsID = this.getClass().getDeclaredFields();
+        fieldsID = this.getClass().getFields();
 
         String className = this.getClass().getSimpleName();
         if (!(isInClassNameModel(className) || className.equals("AddComponent") || className.equals("Transform"))) {
@@ -133,7 +135,10 @@ public abstract class GameComponent {
                     JButton selectImageButton = new JButton("Select Image");
                     selectImageButton.setBounds(130, 30 * (i + 1) + 10, 130, 20);
                     selectImageButton.setForeground(Color.black);
-                    selectImageButton.addActionListener(e -> chooseImage());
+                    selectImageButton.addActionListener(e -> {
+                        chooseImage();
+                        UpdateValues(this.getClass().getSimpleName());
+                    });
 
                     // adding it to array list and panel
                     buttons.add(selectImageButton);
@@ -174,6 +179,8 @@ public abstract class GameComponent {
     }
 
     private void chooseImage() {
+        Enumeration<String> keys = MainProgram.selectedObject.properties.keys();
+
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.removeChoosableFileFilter(fileChooser.getAcceptAllFileFilter());
@@ -181,12 +188,14 @@ public abstract class GameComponent {
         int response = fileChooser.showOpenDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
             System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
-            for (int i = 0; i < MainProgram.selectedObject.properties.getSize(); i++) {
-                if (MainProgram.selectedObject.properties.elementAt(i).getClass().getSimpleName()
-                        .equals("SpriteRenderer")) {
-                    // sets the image as icon of the label of the element
-                    SpriteRenderer spriteRenderer = (SpriteRenderer) MainProgram.selectedObject.properties.elementAt(i);
-                    spriteRenderer.spriteLabel.setIcon(new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath()));
+
+            while (keys.hasMoreElements()) {
+                if (keys.nextElement().equals("SpriteRenderer")) {
+                    // sets the image as icon of the label of the elementRF
+                    SpriteRenderer spriteRenderer = (SpriteRenderer) MainProgram.selectedObject.properties
+                            .get("SpriteRenderer");
+                    spriteRenderer.setImage(new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath()));
+                    spriteRenderer.spriteLabel.setIcon(spriteRenderer.getImage());
                 }
             }
         }
@@ -196,8 +205,8 @@ public abstract class GameComponent {
 
     }
 
-    private void remove(GameComponent gameComponent) {
-        MainProgram.selectedObject.properties.removeElement(this);
+    protected void remove(GameComponent gameComponent) {
+        MainProgram.selectedObject.properties.remove(this.getClass().getSimpleName());
         Test.main.showPanelofSelected();
     }
 
@@ -206,31 +215,19 @@ public abstract class GameComponent {
         return this.getClass().getConstructor().newInstance();
     }
 
-    public abstract void Start();
-
-    public abstract void Update();
-
     public void UpdateValues(String classString) {
         // To get property index of certain gameobject
-        int propIndex = 0;
+
         // Counters
         int checkBoxFieldCount = 0;
         int textFieldCount = 0;
-
-        // looping through all the properties of gameobject to get property index.
-        for (int i = 0; i < MainProgram.selectedObject.properties.getSize(); i++) {
-            if (MainProgram.selectedObject.properties.getElementAt(i).getClass().getSimpleName() == classString) {
-                propIndex = i;
-                break;
-            }
-        }
 
         try {
             // looping through the fieldID's and arraylists to update the fields.
             for (int i = 0; i < fieldsID.length; i++) {
 
                 if (fieldsID[i].get(this) instanceof String) {
-                    fieldsID[i].set(MainProgram.selectedObject.properties.getElementAt(propIndex),
+                    fieldsID[i].set(MainProgram.selectedObject.properties.get(classString),
                             textFieldlist.get(textFieldCount).getText());
                     textFieldCount++;
                 } else if (fieldsID[i].get(this) instanceof Integer) {
@@ -243,40 +240,69 @@ public abstract class GameComponent {
                         GameManager.debugModel.addElement("No input in integer field... Setting to 0.");
                         value = 0;
                     }
-                    fieldsID[i].set(MainProgram.selectedObject.properties.getElementAt(propIndex), value);
-                    textFieldCount++;
 
-                    if (MainProgram.selectedObject.properties.getElementAt(propIndex).getClass().getSimpleName()
-                            .equals("Transform")) {
-                        SpriteRenderer spriteRenderer = null;
-                        for (int index = 0; index < MainProgram.selectedObject.properties.getSize(); index++) {
-                            if (MainProgram.selectedObject.properties.getElementAt(index).getClass().getSimpleName()
-                                    .equals("SpriteRenderer")) {
-                                spriteRenderer = (SpriteRenderer) MainProgram.selectedObject.properties
-                                        .getElementAt(index);
-                            }
-                        }
-                        if (spriteRenderer != null) {
-                            if (fieldsID[i].getName().equals("pos_x")) {
-                                spriteRenderer.spriteLabel.setBounds(value, spriteRenderer.spriteLabel.getY(),
-                                        spriteRenderer.spriteLabel.getWidth(), spriteRenderer.spriteLabel.getHeight());
-                            } else if (fieldsID[i].getName().equals("pos_y")) {
-                                spriteRenderer.spriteLabel.setBounds(spriteRenderer.spriteLabel.getX(), value,
-                                        spriteRenderer.spriteLabel.getWidth(), spriteRenderer.spriteLabel.getHeight());
-                            } else if (fieldsID[i].getName().equals("scale_x")) {
-                                spriteRenderer.spriteLabel.setSize(spriteRenderer.spriteLabel.getWidth() * value,
-                                        spriteRenderer.spriteLabel.getHeight());
-                            } else if (fieldsID[i].getName().equals("scale_y")) {
-                                spriteRenderer.spriteLabel.setSize(50 , 50* value);
-                            }
+                    if (MainProgram.selectedObject.properties.get("SpriteRenderer") != null) {
+                        SpriteRenderer spriteRenderer = (SpriteRenderer) MainProgram.selectedObject.properties
+                                .get("SpriteRenderer");
+
+                        if (fieldsID[i].getName().equals("pos_x")) {
+                            System.out.println("pos_x:"+spriteRenderer.spriteLabel.getX());
+                            spriteRenderer.spriteLabel.setLocation(value, spriteRenderer.spriteLabel.getY());
+
+                        } else if (fieldsID[i].getName().equals("pos_y")) {
+                            System.out.println("pos_y:"+spriteRenderer.spriteLabel.getY());
+                            spriteRenderer.spriteLabel.setLocation(spriteRenderer.spriteLabel.getX(), value);
+
+                        } else if (fieldsID[i].getName().equals("width")) {
+                            spriteRenderer.spriteLabel.setSize(value, spriteRenderer.spriteLabel.getHeight());
+                            System.out.println("width:"+spriteRenderer.spriteLabel.getWidth());
+                            spriteRenderer.spriteLabel.setIcon(spriteRenderer.getImage());
+
+                        } else if (fieldsID[i].getName().equals("height")) {
+                            spriteRenderer.spriteLabel.setSize(spriteRenderer.spriteLabel.getWidth(), value);
+                            System.out.println("height:"+spriteRenderer.spriteLabel.getHeight());
+                            spriteRenderer.spriteLabel.setIcon(spriteRenderer.getImage());
+                        
                         }
                     }
+
+                    fieldsID[i].set(MainProgram.selectedObject.properties.get(classString), value);
+                    textFieldCount++;
+
+                } else if (fieldsID[i].get(this) instanceof Float) {
+                    float value;
+                    try {
+                        value = (textFieldlist.get(textFieldCount).getText() != "")
+                                ? Float.parseFloat(textFieldlist.get(textFieldCount).getText())
+                                : 0;
+                    } catch (Exception e) {
+                        GameManager.debugModel.addElement("No input in float field... Setting to 0.");
+                        value = 0;
+                    }
+
+                    if (MainProgram.selectedObject.properties.get("SpriteRenderer") != null) {
+                        SpriteRenderer spriteRenderer = (SpriteRenderer) MainProgram.selectedObject.properties
+                                .get("SpriteRenderer");
+
+                        if (fieldsID[i].getName().equals("scale_x")) {
+                            spriteRenderer.spriteLabel.setSize( (int) (spriteRenderer.spriteLabel.getWidth() * value),
+                                    spriteRenderer.spriteLabel.getHeight());
+                            System.out.println("scale_x:"+spriteRenderer.spriteLabel.getWidth());
+                            spriteRenderer.spriteLabel.setIcon(spriteRenderer.getImage());
+
+                        } else if (fieldsID[i].getName().equals("scale_y")) {
+                            spriteRenderer.spriteLabel.setSize(spriteRenderer.spriteLabel.getWidth(),
+                                    (int)(spriteRenderer.spriteLabel.getHeight() * value));
+                            System.out.println("scale_y:"+spriteRenderer.spriteLabel.getHeight());
+                            spriteRenderer.spriteLabel.setIcon(spriteRenderer.getImage());
+                        }
+                    }
+
+                    fieldsID[i].set(MainProgram.selectedObject.properties.get(classString), value);
+                    textFieldCount++;
+
                 } else if (fieldsID[i].get(this) instanceof Boolean) {
-                    fieldsID[i].set(MainProgram.selectedObject.properties.getElementAt(propIndex),
-                            checkBoxes.get(checkBoxFieldCount).isSelected());
-                    checkBoxFieldCount++;
-                } else if (fieldsID[i].get(this) instanceof JLabel) {
-                    fieldsID[i].set(MainProgram.selectedObject.properties.getElementAt(propIndex),
+                    fieldsID[i].set(MainProgram.selectedObject.properties.get(classString),
                             checkBoxes.get(checkBoxFieldCount).isSelected());
                     checkBoxFieldCount++;
                 }
@@ -289,5 +315,36 @@ public abstract class GameComponent {
         Test.main.refreshFrame();
     }
 
+    // Abstract methods
     public abstract GameComponent newInstance();
+
+    public abstract void Start();
+
+    public abstract void Update();
+
+    public abstract void Stop();
+    // -- Getter Setters
+    public JPanel getPanel() {
+        return panel;
+    }
+
+    public void setPanel(JPanel panel) {
+        this.panel = panel;
+    }
+
+    public ArrayList<JLabel> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(ArrayList<JLabel> labels) {
+        this.labels = labels;
+    }
+
+    public GameObject getGameObject() {
+        return gameObject;
+    }
+
+    public void setGameObject(GameObject gameObject) {
+        this.gameObject = gameObject;
+    }
 }

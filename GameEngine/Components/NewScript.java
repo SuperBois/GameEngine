@@ -106,6 +106,12 @@ public class NewScript extends GameComponent {
     public GameComponent newInstance() {
         return new NewScript();
     }
+
+    @Override
+    public void Stop() {
+        // TODO Auto-generated method stub
+        
+    }
     
 
 }

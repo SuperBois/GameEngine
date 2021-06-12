@@ -18,10 +18,10 @@ public class ObjectRenderer extends JLabel implements ListCellRenderer<GameObjec
     public Component getListCellRendererComponent(JList<? extends GameObject> list, GameObject gameObject, int index,
         boolean isSelected, boolean cellHasFocus) {
           
-        ImageIcon imageIcon = new ImageIcon("GameEngine\\Icons\\object.png");
+        ImageIcon imageIcon = new ImageIcon(getClass().getResource("..\\Icons\\object.png"));
          
         setIcon(imageIcon);
-        Transform transform = (Transform) gameObject.properties.firstElement();
+        Transform transform = (Transform) gameObject.properties.get("Transform");
         setText(transform.getName());
          
 

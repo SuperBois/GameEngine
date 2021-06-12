@@ -2,6 +2,7 @@ package GameEngine.Components;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.Enumeration;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -37,12 +38,13 @@ public class AddComponent extends GameComponent {
         textField = new JTextField();
         filteredClassModel = new DefaultListModel<GameComponent>();
         filteredClassList = new JList<GameComponent>(filteredClassModel);
-        
-        for (int i=0; i<GameManager.classNameModel.getSize(); i++){
+
+        for (int i = 0; i < GameManager.classNameModel.getSize(); i++) {
             filteredClassModel.addElement(GameManager.classNameModel.elementAt(i));
         }
 
-        textField.setSize(new Dimension(270, 30));;
+        textField.setSize(new Dimension(270, 30));
+        ;
         textField.setText("");
         removable = false;
 
@@ -79,11 +81,11 @@ public class AddComponent extends GameComponent {
     void showClasses() {
 
         addComponentButton.setVisible(false);
-        textField.getDocument().addDocumentListener(new DocumentListener(){
+        textField.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                
+
             }
 
             @Override
@@ -95,14 +97,14 @@ public class AddComponent extends GameComponent {
             public void removeUpdate(DocumentEvent e) {
                 filterComponents();
             }
-            
+
         });
         textField.setVisible(true);
         scrollPane.setVisible(true);
         button.setVisible(true);
         filteredClassList.setSelectedIndex(0);
-        // scrolls the panel to bottom 
-        Test.main.scrollToBottom();
+        // scrolls the panel to bottom
+        Test.main.scrollToTop();
         // refreshes the frame
         refreshFrame();
         // requests focus for text field
@@ -114,15 +116,16 @@ public class AddComponent extends GameComponent {
         NewScript.name = textField.getText().toLowerCase();
         System.out.println(NewScript.name);
         filteredClassModel.removeAllElements();
-        
-        for (int i=0; i<GameManager.classNameModel.getSize(); i++){
-            
+
+        for (int i = 0; i < GameManager.classNameModel.getSize(); i++) {
+
             String className = GameManager.classNameModel.elementAt(i).getClass().getSimpleName();
             // adds the element to list if it is in classnameList
             if (className.toLowerCase().contains(textField.getText().toLowerCase()))
                 filteredClassModel.addElement(GameManager.classNameModel.elementAt(i));
             // removes the element from list if it is in properties
-            if (MainProgram.selectedObject.properties.contains(GameManager.classNameModel.elementAt(i)))
+            if (MainProgram.selectedObject.properties
+                    .get(GameManager.classNameModel.elementAt(i).getClass().getSimpleName()) != null)
                 filteredClassModel.removeElement(GameManager.classNameModel.elementAt(i));
 
         }
@@ -134,42 +137,47 @@ public class AddComponent extends GameComponent {
     }
 
     // adds selected class at the second last index of object's list model
-    void addComponent(){
-        GameComponent selectedClass = (GameComponent) filteredClassModel.elementAt(filteredClassList.getSelectedIndex()).newInstance();
+    void addComponent() {
+        GameComponent newComponent = (GameComponent) filteredClassModel.elementAt(filteredClassList.getSelectedIndex())
+                .newInstance();
+        newComponent.setGameObject(MainProgram.selectedObject);
         // add element at second last index
-        if (!isInSelectedObjectProperties(selectedClass.getClass().getSimpleName()))
-            MainProgram.selectedObject.properties.add(MainProgram.selectedObject.properties.getSize()-1, selectedClass);
+        if (!isInSelectedObjectProperties(newComponent.getClass().getSimpleName()))
+            MainProgram.selectedObject.properties.put(newComponent.getClass().getSimpleName(), newComponent);
         Test.main.showPanelofSelected();
         button.setVisible(false);
         scrollPane.setVisible(false);
         textField.setVisible(false);
         addComponentButton.setVisible(true);
-        Test.main.scrollToBottom();
+        Test.main.scrollToTop();
     }
-    void refreshFrame(){
+
+    void refreshFrame() {
         Test.main.invalidate();
         Test.main.validate();
         Test.main.repaint();
     }
 
     private boolean isInSelectedObjectProperties(String name) {
-        for (int i=0; i<MainProgram.selectedObject.properties.getSize(); i++){
-            String className = MainProgram.selectedObject.properties.elementAt(i).getClass().getSimpleName();
-            if (className.equals(name))
+        Enumeration<String> keys = MainProgram.selectedObject.properties.keys();
+
+        while (keys.hasMoreElements()) {
+            if (name.equals(keys.nextElement()))
                 return true;
         }
         return false;
     }
+
     @Override
     public void Start() {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void Update() {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -177,5 +185,10 @@ public class AddComponent extends GameComponent {
         return new AddComponent();
     }
 
-    
+    @Override
+    public void Stop() {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

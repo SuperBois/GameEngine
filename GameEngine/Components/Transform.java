@@ -5,12 +5,15 @@ import GameEngine.Components.Definition.GameComponent;
 public class Transform extends GameComponent{
     public String name;
     public int pos_x,pos_y;
+    public int width, height;
     public float scale_x, scale_y;
     // default constructor
     public Transform(){
         setName("GameObject");
         this.pos_x = 0;
         this.pos_y = 0;
+        this.width = 100;
+        this.height = 100;
         this.scale_x = (float) 1.0;
         this.scale_y = (float) 1.0;
         removable = false;
@@ -31,10 +34,6 @@ public class Transform extends GameComponent{
     }
 
     @Override
-    public String toString() {
-        return name + "\n" + pos_x + "\n" + pos_y;
-    }
-    @Override
     public void Start() {
         // TODO Auto-generated method stub
         
@@ -47,5 +46,10 @@ public class Transform extends GameComponent{
     @Override
     public GameComponent newInstance() {
         return new Transform();
+    }
+    @Override
+    public void Stop() {
+        // TODO Auto-generated method stub
+        
     }
 }

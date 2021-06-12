@@ -10,6 +10,7 @@ import GameEngine.Renderer.JTabbedPaneCloseButton;
 import GameEngine.Renderer.ObjectRenderer;
 import java.awt.event.MouseAdapter;
 import java.io.File;
+import java.util.Enumeration;
 import java.awt.event.*;
 import java.awt.*;
 
@@ -93,7 +94,7 @@ public class MainProgram extends JFrame {
         bg_color = Color.white;
 
         // Making the frame/ window
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(close());
         this.setLayout(new BorderLayout(10, 10)); // ARGUMENTS FOR MARGINS BETWEEN COMPONENTS
         // this.setMinimumSize(new Dimension(1280,720));
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -120,6 +121,11 @@ public class MainProgram extends JFrame {
         this.pack();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         this.setVisible(true);
+    }
+
+    private int close() {
+        
+        return JFrame.DISPOSE_ON_CLOSE;
     }
 
     private void CreateGUI() {
@@ -315,7 +321,7 @@ public class MainProgram extends JFrame {
         // ---------------Preparing the ribbon Panel
         JPanel centerPanel = new JPanel();
         JButton play = new JButton();
-          play.setIcon(new ImageIcon("GameEngine\\Icons\\play.png"));
+          play.setIcon(new ImageIcon(getClass().getResource("Icons\\play.png")));
           play.setBackground(Color.black);
           play.setFocusable(false);
           play.addActionListener(e -> {
@@ -324,21 +330,21 @@ public class MainProgram extends JFrame {
           centerPanel.add(play);
           // Button to pause the game
           JButton pause = new JButton();
-          pause.setIcon(new ImageIcon("GameEngine\\Icons\\pause.png"));
+          pause.setIcon(new ImageIcon(getClass().getResource("Icons\\pause.png")));
           pause.setBackground(Color.BLACK);
           pause.setFocusable(false);
-          pause.addActionListener(e -> {
-            // play.setEnabled(true);  
-            GameManager.running =false;});
+        //   pause.addActionListener(e -> {
+        //     // play.setEnabled(true);  
+        //     GameManager.running =false;});
           centerPanel.add(pause);
           // Button to stop the game
           JButton stop = new JButton();
-          stop.setIcon(new ImageIcon("GameEngine\\Icons\\stop.png"));
+          stop.setIcon(new ImageIcon(getClass().getResource("Icons\\stop.png")));
           stop.setBackground(Color.black);
           stop.setFocusable(false);
           stop.addActionListener(e -> {
             play.setEnabled(true); 
-            GameManager.stop = true;});
+            GameManager.stop();});
           centerPanel.add(stop);
         centerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         centerPanel.setPreferredSize(new Dimension(400, 50));
@@ -405,8 +411,9 @@ public class MainProgram extends JFrame {
 
         if (!(selectedObject == null))
         {
-            for (int i = 0; i < selectedObject.properties.getSize(); i++) {
-                JPanel componentPanel = selectedObject.properties.elementAt(i).panel;
+            Enumeration<String> keys = MainProgram.selectedObject.properties.keys();
+            while (keys.hasMoreElements()){
+                JPanel componentPanel = selectedObject.properties.get(keys.nextElement()).getPanel();
                 componentPanel.setBackground(bg_color);
                 componentPanel.setForeground(fg_color);
                 tempPanel.add(componentPanel);
@@ -421,13 +428,13 @@ public class MainProgram extends JFrame {
         refreshFrame();
     }
 
-    public void scrollToBottom() {
+    public void scrollToTop() {
         JScrollBar verticalBar = scrollPane.getVerticalScrollBar();
         AdjustmentListener downScroller = new AdjustmentListener() {
             @Override
             public void adjustmentValueChanged(AdjustmentEvent e) {
                 Adjustable adjustable = e.getAdjustable();
-                adjustable.setValue(adjustable.getMaximum());
+                adjustable.setValue(adjustable.getMinimum());
                 verticalBar.removeAdjustmentListener(this);
             }
         };
@@ -476,6 +483,7 @@ public class MainProgram extends JFrame {
         }
         return -1;
     }
+    
     public void updateColor(){
         // updating the colors of objects list
         objectsList.setBackground(bg_color);
@@ -495,13 +503,15 @@ public class MainProgram extends JFrame {
 
         for (int i = 0; i < GameManager.objectsModel.getSize(); i++ )
         {
-            for (int j = 0; j < GameManager.objectsModel.getElementAt(i).properties.getSize(); j++) 
+            Enumeration<String> keys = GameManager.objectsModel.getElementAt(i).properties.keys();
+            while (keys.hasMoreElements())
             {
-                GameManager.objectsModel.getElementAt(i).properties.getElementAt(j).panel.setBackground(bg_color);
-                GameManager.objectsModel.getElementAt(i).properties.getElementAt(j).panel.setForeground(fg_color);
-                for (int k = 0; k < GameManager.objectsModel.getElementAt(i).properties.getElementAt(j).labels.size(); k++) 
+                String propertyKey = keys.nextElement();
+                GameManager.objectsModel.getElementAt(i).properties.get(propertyKey).getPanel().setBackground(bg_color);
+                GameManager.objectsModel.getElementAt(i).properties.get(propertyKey).getPanel().setForeground(fg_color);
+                for (int k = 0; k < GameManager.objectsModel.getElementAt(i).properties.get(propertyKey).getLabels().size(); k++) 
                 {
-                    GameManager.objectsModel.getElementAt(i).properties.getElementAt(j).labels.get(k).setForeground(fg_color);
+                    GameManager.objectsModel.getElementAt(i).properties.get(propertyKey).getLabels().get(k).setForeground(fg_color);
                 }
             }
         }

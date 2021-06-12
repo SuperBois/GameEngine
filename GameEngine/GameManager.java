@@ -21,10 +21,14 @@ public class GameManager {
     }
 
     public static void Play() {
-        
+            running = true; stop = false;
             Runnable runnable = new Render();
             Thread renderThread = new Thread(runnable);
-            System.out.println("I am running");
             renderThread.start();
+    }
+
+    public static void stop(){
+        stop = true;
+        
     }
 }
