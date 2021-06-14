@@ -50,4 +50,10 @@ public class Child1 extends GameComponent {
         return new Child1();
     }
 
+    @Override
+    public void Stop() {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

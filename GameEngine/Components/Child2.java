@@ -41,4 +41,10 @@ public class Child2 extends GameComponent {
     public GameComponent newInstance() {
         return new Child2();
     }
+
+    @Override
+    public void Stop() {
+        // TODO Auto-generated method stub
+        
+    }
 }
