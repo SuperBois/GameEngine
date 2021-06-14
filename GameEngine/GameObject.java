@@ -7,11 +7,14 @@ import GameEngine.Components.Transform;
 import GameEngine.Components.Definition.GameComponent;
 
 public class GameObject{
+    public boolean canMove;
     public Dictionary<String , GameComponent> properties;
     // public DefaultListModel<GameComponent> properties;
 
     GameObject(){
         properties = new Hashtable<String , GameComponent>();
+        canMove = true;
+
         Transform transform = new Transform();
         transform.setGameObject(this);
 

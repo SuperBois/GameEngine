@@ -28,11 +28,14 @@ public class Move extends GameComponent {
 
     @Override
     public void Update() {
-        x_pos += x_speed;
-        y_pos += y_speed;
-        spriteRenderer.spriteLabel.setBounds(x_pos, y_pos, transform.width, transform.height);
+        if (gameObject.canMove){
+            x_pos += x_speed;
+            y_pos += y_speed;
+            spriteRenderer.spriteLabel.setBounds(x_pos, y_pos, transform.width, transform.height);
+    
+        }
     }
-
+    
     @Override
     public void Stop(){
         spriteRenderer.spriteLabel.setBounds(transform.pos_x, transform.pos_y, transform.width, transform.height);

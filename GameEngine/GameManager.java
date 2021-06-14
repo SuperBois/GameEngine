@@ -22,8 +22,13 @@ public class GameManager {
 
     public static void Play() {
             running = true; stop = false;
-            Runnable runnable = new Render();
-            Thread renderThread = new Thread(runnable);
+
+            Runnable runnable1 = new Physics();
+            Thread physicsThread = new Thread(runnable1);
+            physicsThread.start();
+
+            Runnable runnable2 = new Render();
+            Thread renderThread = new Thread(runnable2);
             renderThread.start();
     }
 

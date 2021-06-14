@@ -187,8 +187,6 @@ public abstract class GameComponent {
         fileChooser.setFileFilter(new FileNameExtensionFilter("Image files", "png", "jpg", "jpeg", "bmp"));
         int response = fileChooser.showOpenDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
-            System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
-
             while (keys.hasMoreElements()) {
                 if (keys.nextElement().equals("SpriteRenderer")) {
                     // sets the image as icon of the label of the elementRF
@@ -246,21 +244,17 @@ public abstract class GameComponent {
                                 .get("SpriteRenderer");
 
                         if (fieldsID[i].getName().equals("pos_x")) {
-                            System.out.println("pos_x:"+spriteRenderer.spriteLabel.getX());
                             spriteRenderer.spriteLabel.setLocation(value, spriteRenderer.spriteLabel.getY());
 
                         } else if (fieldsID[i].getName().equals("pos_y")) {
-                            System.out.println("pos_y:"+spriteRenderer.spriteLabel.getY());
                             spriteRenderer.spriteLabel.setLocation(spriteRenderer.spriteLabel.getX(), value);
 
                         } else if (fieldsID[i].getName().equals("width")) {
                             spriteRenderer.spriteLabel.setSize(value, spriteRenderer.spriteLabel.getHeight());
-                            System.out.println("width:"+spriteRenderer.spriteLabel.getWidth());
                             spriteRenderer.spriteLabel.setIcon(spriteRenderer.getImage());
 
                         } else if (fieldsID[i].getName().equals("height")) {
                             spriteRenderer.spriteLabel.setSize(spriteRenderer.spriteLabel.getWidth(), value);
-                            System.out.println("height:"+spriteRenderer.spriteLabel.getHeight());
                             spriteRenderer.spriteLabel.setIcon(spriteRenderer.getImage());
                         
                         }
@@ -287,13 +281,11 @@ public abstract class GameComponent {
                         if (fieldsID[i].getName().equals("scale_x")) {
                             spriteRenderer.spriteLabel.setSize( (int) (spriteRenderer.spriteLabel.getWidth() * value),
                                     spriteRenderer.spriteLabel.getHeight());
-                            System.out.println("scale_x:"+spriteRenderer.spriteLabel.getWidth());
                             spriteRenderer.spriteLabel.setIcon(spriteRenderer.getImage());
 
                         } else if (fieldsID[i].getName().equals("scale_y")) {
                             spriteRenderer.spriteLabel.setSize(spriteRenderer.spriteLabel.getWidth(),
                                     (int)(spriteRenderer.spriteLabel.getHeight() * value));
-                            System.out.println("scale_y:"+spriteRenderer.spriteLabel.getHeight());
                             spriteRenderer.spriteLabel.setIcon(spriteRenderer.getImage());
                         }
                     }
