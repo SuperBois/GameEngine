@@ -26,13 +26,13 @@ public class Child2 extends GameComponent {
     }
 
     @Override
-    public void Start() {
+    public void start() {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void Update() {
+    public void update() {
         // TODO Auto-generated method stub
         
     }
@@ -43,7 +43,7 @@ public class Child2 extends GameComponent {
     }
 
     @Override
-    public void Stop() {
+    public void stop() {
         // TODO Auto-generated method stub
         
     }

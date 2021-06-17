@@ -12,9 +12,13 @@ public class GameManager {
     public static DefaultListModel<String> debugModel = new DefaultListModel<String>();
     
     public static boolean running = true, stop = false;
-    public static void getFilesPaths(String projectPath)
-    {
-        File Directory = new File(projectPath);
+
+    public static String projectPath;
+
+    public static void getFilesPaths(String location)
+    {   
+        projectPath = String.copyValueOf(location.toCharArray());
+        File Directory = new File(location);
         File[] list = Directory.listFiles();
         for (File file : list)
             projectFilesModel.addElement(file);

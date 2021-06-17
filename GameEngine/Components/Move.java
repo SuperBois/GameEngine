@@ -1,8 +1,10 @@
 package GameEngine.Components;
 
+import java.io.Serializable;
+
 import GameEngine.Components.Definition.GameComponent;
 
-public class Move extends GameComponent {
+public class Move extends GameComponent implements Serializable {
     // moves the gameobject with the given speed
 
     public int x_speed;
@@ -18,7 +20,7 @@ public class Move extends GameComponent {
     }
 
     @Override
-    public void Start() {
+    public void start() {
         transform  = (Transform) gameObject.properties.get("Transform");
         spriteRenderer = (SpriteRenderer) gameObject.properties.get("SpriteRenderer");
         x_pos = transform.pos_x;
@@ -27,7 +29,7 @@ public class Move extends GameComponent {
     }
 
     @Override
-    public void Update() {
+    public void update() {
         if (gameObject.canMove){
             x_pos += x_speed;
             y_pos += y_speed;
@@ -37,7 +39,7 @@ public class Move extends GameComponent {
     }
     
     @Override
-    public void Stop(){
+    public void stop(){
         spriteRenderer.spriteLabel.setBounds(transform.pos_x, transform.pos_y, transform.width, transform.height);
     }
 

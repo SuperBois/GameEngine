@@ -7,7 +7,7 @@ import GameEngine.Components.*;
 public class Test {
     public static MainProgram main;
     public static void main(String[] args) {
-        GameManager.getFilesPaths("C:\\");
+        GameManager.getFilesPaths("C:\\Users\\MuhammadMustafa\\Music\\Example");
         main = new MainProgram();
         // ---------------
         new SpriteRenderer();

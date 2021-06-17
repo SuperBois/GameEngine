@@ -3,6 +3,7 @@ package GameEngine;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import GameEngine.Renderer.DebugRenderer;
 import GameEngine.Renderer.FilesRenderer;
@@ -10,10 +11,19 @@ import GameEngine.Renderer.JTabbedPaneCloseButton;
 import GameEngine.Renderer.ObjectRenderer;
 import java.awt.event.MouseAdapter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.util.Enumeration;
 import java.awt.event.*;
 import java.awt.*;
 
+import GameEngine.Components.Transform;
+import GameEngine.Components.Definition.GameComponent;
 import GameEngine.Panels.TextEditorPanel;
 
 public class MainProgram extends JFrame {
@@ -411,6 +421,8 @@ public class MainProgram extends JFrame {
 
         if (!(selectedObject == null))
         {
+            Transform transform = (Transform) selectedObjectproperties.get("Transform");
+            System.out.println(transform.name);
             Enumeration<String> keys = MainProgram.selectedObject.properties.keys();
             while (keys.hasMoreElements()){
                 JPanel componentPanel = selectedObject.properties.get(keys.nextElement()).getPanel();
@@ -444,8 +456,7 @@ public class MainProgram extends JFrame {
     void panelToTab(String name, JPanel panel){
         tabbedPane.add(name+space, panel);
     }
-    public static void displayFiles(){   
-    }
+
     private void exitProgram() {
         // TODO: Add the code to exit the program safely
     }
@@ -459,10 +470,71 @@ public class MainProgram extends JFrame {
         // TODO: Add the code to build and export the current project
     }
     private void saveProject() {
-        // TODO: Add the code to save the project
+        try {
+            // opening a file for writing output
+            FileOutputStream fileOutputStream = new FileOutputStream(GameManager.projectPath+"\\object.ser");
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+            // writing "array" to file
+            objectOutputStream.writeObject(GameManager.objectsModel);
+            objectOutputStream.close();
+
+            // opening a file for writing output
+            fileOutputStream = new FileOutputStream(GameManager.projectPath+"\\classes.ser");
+            objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+            // writing "array" to file
+            objectOutputStream.writeObject(GameManager.classNameModel);
+            objectOutputStream.close();
+
+        } catch (FileNotFoundException e) {
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     private void openProject() {
-        // TODO: Add the code to open an existing project
+        try {
+
+           // opening a file for writing output
+           FileInputStream fileInputStream = new FileInputStream(GameManager.projectPath+"\\classes.ser");
+           ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+           DefaultListModel classes = (DefaultListModel) objectInputStream.readObject();
+           // writing "array" to file
+           GameManager.classNameModel.removeAllElements();
+           for (int i =0; i<classes.size();i++){
+               GameComponent gameComponent = (GameComponent)classes.elementAt(i);
+               GameManager.classNameModel.addElement(gameComponent);
+           }
+           objectInputStream.close();
+
+
+            // opening a file for writing output
+            fileInputStream = new FileInputStream(GameManager.projectPath+"\\object.ser");
+            objectInputStream = new ObjectInputStream(fileInputStream);
+
+            DefaultListModel objects = (DefaultListModel) objectInputStream.readObject();
+            // writing "array" to file
+            GameManager.objectsModel.removeAllElements();
+            for (int i =0; i<objects.size();i++){
+                GameObject gameObject = (GameObject)objects.elementAt(i);
+                GameManager.objectsModel.addElement(gameObject);
+                Transform transform = (Transform) gameObject.properties.get("Transform");
+                System.out.println(transform.name);
+            }
+            objectInputStream.close();
+           refreshFrame();
+
+        } catch (FileNotFoundException e) {
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+
+            e.printStackTrace();
+        }
     }
     private void createProject() {
         // TODO: Add the code to create a new Project

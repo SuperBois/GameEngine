@@ -13,7 +13,7 @@ public class Render implements Runnable {
             Enumeration<GameComponent> components = object.properties.elements();
             while (components.hasMoreElements()) {
                 GameComponent gameComponent = components.nextElement();
-                gameComponent.Start();
+                gameComponent.start();
             }
         }
 
@@ -27,7 +27,7 @@ public class Render implements Runnable {
                     Enumeration<GameComponent> components = object.properties.elements();
                     while (components.hasMoreElements()) {
                         GameComponent gameComponent = components.nextElement();
-                        gameComponent.Update();
+                        gameComponent.update();
                     }
                 }
                 try {
@@ -43,7 +43,7 @@ public class Render implements Runnable {
             Enumeration<GameComponent> components = object.properties.elements();
             while (components.hasMoreElements()) {
                 GameComponent gameComponent = components.nextElement();
-                gameComponent.Stop();
+                gameComponent.stop();
             }
         }
     }

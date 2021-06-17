@@ -1,11 +1,16 @@
 package GameEngine.Components;
 
+import java.io.Serializable;
+
 import GameEngine.Components.Definition.GameComponent;
 
-public class PhysicsBody extends GameComponent {
+public class PhysicsBody extends GameComponent implements Serializable{
     public int mass;
     public boolean useGravity;
     public boolean isKinematic;
+
+    protected int x_speed;
+    protected int y_speed;
 
     protected Transform transform;
     protected SpriteRenderer spriteRenderer;
@@ -18,23 +23,27 @@ public class PhysicsBody extends GameComponent {
         createPanel();
     }
 
+    public void addForce(int magnitude, int angle){
+        
+    }
+
     @Override
-    public void Start() {
+    public void start() {
         transform = (Transform) gameObject.properties.get("Transform");
         spriteRenderer = (SpriteRenderer) gameObject.properties.get("SpriteRenderer");
         y_pos = transform.pos_y;
     }
 
     @Override
-    public void Update() {
-        if (gameObject.canMove && useGravity && spriteRenderer != null) {
+    public void update() {
+        if (useGravity && spriteRenderer != null) {
             y_pos += (2 + mass);
             spriteRenderer.spriteLabel.setBounds(transform.pos_x, y_pos, transform.width, transform.height);
         }
     }
 
     @Override
-    public void Stop() {
+    public void stop() {
         spriteRenderer.spriteLabel.setBounds(transform.pos_x, transform.pos_y, transform.width, transform.height);
     }
 

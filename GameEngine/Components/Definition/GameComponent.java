@@ -1,6 +1,8 @@
 package GameEngine.Components.Definition;
 
 import java.awt.*;
+import java.io.Serializable;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.text.PlainDocument;
@@ -310,11 +312,11 @@ public abstract class GameComponent {
     // Abstract methods
     public abstract GameComponent newInstance();
 
-    public abstract void Start();
+    public abstract void start();
 
-    public abstract void Update();
+    public abstract void update();
 
-    public abstract void Stop();
+    public abstract void stop();
     // -- Getter Setters
     public JPanel getPanel() {
         return panel;

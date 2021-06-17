@@ -3,12 +3,13 @@ package GameEngine.Components;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import java.awt.Color;
+import java.io.Serializable;
 
 import GameEngine.MainProgram;
 import GameEngine.Test;
 import GameEngine.Components.Definition.GameComponent;
 
-public class SpriteRenderer extends GameComponent {
+public class SpriteRenderer extends GameComponent implements Serializable{
 
     public JLabel spriteLabel;
     public Color color; 
@@ -23,12 +24,12 @@ public class SpriteRenderer extends GameComponent {
     }
 
     @Override
-    public void Start() {
+    public void start() {
         // TODO Auto-generated method stub
     }
 
     @Override
-    public void Update() {
+    public void update() {
         // TODO Auto-generated method stub
     }
 
@@ -53,7 +54,7 @@ public class SpriteRenderer extends GameComponent {
     }
 
     @Override
-    public void Stop() {
+    public void stop() {
         // TODO Auto-generated method stub
         
     }

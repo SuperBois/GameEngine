@@ -1,12 +1,13 @@
 package GameEngine;
 
 
+import java.io.Serializable;
 import java.util.*;
 import GameEngine.Components.AddComponent;
 import GameEngine.Components.Transform;
 import GameEngine.Components.Definition.GameComponent;
 
-public class GameObject{
+public class GameObject implements Serializable{
     public boolean canMove;
     public Dictionary<String , GameComponent> properties;
     // public DefaultListModel<GameComponent> properties;

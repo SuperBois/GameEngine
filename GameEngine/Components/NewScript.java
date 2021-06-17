@@ -8,8 +8,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 
-public class NewScript extends GameComponent {
+public class NewScript extends GameComponent implements Serializable{
     public static String name;
     // No arg constructor
     public NewScript(){
@@ -91,13 +92,13 @@ public class NewScript extends GameComponent {
     }
 
     @Override
-    public void Start() {
+    public void start() {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void Update() {
+    public void update() {
         // TODO Auto-generated method stub
         
     }
@@ -108,7 +109,7 @@ public class NewScript extends GameComponent {
     }
 
     @Override
-    public void Stop() {
+    public void stop() {
         // TODO Auto-generated method stub
         
     }

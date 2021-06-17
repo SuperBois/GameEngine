@@ -2,6 +2,7 @@ package GameEngine.Components;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.io.Serializable;
 import java.util.Enumeration;
 
 import javax.swing.BoxLayout;
@@ -22,7 +23,7 @@ import GameEngine.Test;
 import GameEngine.Components.Definition.GameComponent;
 import GameEngine.Renderer.ComponentListRenderer;
 
-public class AddComponent extends GameComponent {
+public class AddComponent extends GameComponent implements Serializable{
 
     JList<GameComponent> filteredClassList;
     JScrollPane scrollPane;
@@ -169,13 +170,13 @@ public class AddComponent extends GameComponent {
     }
 
     @Override
-    public void Start() {
+    public void start() {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void Update() {
+    public void update() {
         // TODO Auto-generated method stub
 
     }
@@ -186,7 +187,7 @@ public class AddComponent extends GameComponent {
     }
 
     @Override
-    public void Stop() {
+    public void stop() {
         // TODO Auto-generated method stub
         
     }

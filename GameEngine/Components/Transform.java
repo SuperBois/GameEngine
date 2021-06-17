@@ -1,8 +1,10 @@
 package GameEngine.Components;
 
+import java.io.Serializable;
+
 import GameEngine.Components.Definition.GameComponent;
 
-public class Transform extends GameComponent{
+public class Transform extends GameComponent implements Serializable {
     public String name;
     public int pos_x,pos_y;
     public int width, height;
@@ -34,12 +36,12 @@ public class Transform extends GameComponent{
     }
 
     @Override
-    public void Start() {
+    public void start() {
         // TODO Auto-generated method stub
         
     }
     @Override
-    public void Update() {
+    public void update() {
         // TODO Auto-generated method stub
         
     }
@@ -48,7 +50,7 @@ public class Transform extends GameComponent{
         return new Transform();
     }
     @Override
-    public void Stop() {
+    public void stop() {
         // TODO Auto-generated method stub
         
     }

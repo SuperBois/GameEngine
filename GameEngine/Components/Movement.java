@@ -1,20 +1,22 @@
 package GameEngine.Components;
 
+import java.io.Serializable;
+
 import GameEngine.Components.Definition.GameComponent;
 
-public class Movement extends GameComponent {
+public class Movement extends GameComponent implements Serializable{
 
     public Movement(){
         createPanel();
     }
 
     @Override
-    public void Start() {
+    public void start() {
         // TODO Auto-generated method stub
     }
 
     @Override
-    public void Update() {
+    public void update() {
         // TODO Auto-generated method stub
     }
 
@@ -24,7 +26,7 @@ public class Movement extends GameComponent {
     }
 
     @Override
-    public void Stop() {
+    public void stop() {
         // TODO Auto-generated method stub
         
     }
