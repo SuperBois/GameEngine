@@ -20,6 +20,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Set;
 
 public abstract class GameComponent {
 
@@ -181,7 +183,8 @@ public abstract class GameComponent {
     }
 
     private void chooseImage() {
-        Enumeration<String> keys = MainProgram.selectedObject.properties.keys();
+        Set keys = MainProgram.selectedObject.properties.keySet();
+        Iterator iterator = keys.iterator();
 
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setMultiSelectionEnabled(false);
@@ -189,8 +192,8 @@ public abstract class GameComponent {
         fileChooser.setFileFilter(new FileNameExtensionFilter("Image files", "png", "jpg", "jpeg", "bmp"));
         int response = fileChooser.showOpenDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
-            while (keys.hasMoreElements()) {
-                if (keys.nextElement().equals("SpriteRenderer")) {
+            while (iterator.hasNext()) {
+                if (iterator.next().equals("SpriteRenderer")) {
                     // sets the image as icon of the label of the elementRF
                     SpriteRenderer spriteRenderer = (SpriteRenderer) MainProgram.selectedObject.properties
                             .get("SpriteRenderer");

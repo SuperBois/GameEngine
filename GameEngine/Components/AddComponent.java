@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.io.Serializable;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -160,10 +162,11 @@ public class AddComponent extends GameComponent implements Serializable{
     }
 
     private boolean isInSelectedObjectProperties(String name) {
-        Enumeration<String> keys = MainProgram.selectedObject.properties.keys();
+        Set keys = MainProgram.selectedObject.properties.keySet();
+        Iterator iterator = keys.iterator();
 
-        while (keys.hasMoreElements()) {
-            if (name.equals(keys.nextElement()))
+        while (iterator.hasNext()) {
+            if (name.equals(iterator.next()))
                 return true;
         }
         return false;

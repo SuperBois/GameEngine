@@ -1,6 +1,7 @@
 package GameEngine;
 
-import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.swing.JFrame;
 
@@ -15,29 +16,42 @@ public class Render implements Runnable {
         // Calling the Start Method of every game Component
         for (int i = 0; i < GameManager.objectsModel.getSize(); i++) {
             GameObject object = GameManager.objectsModel.getElementAt(i);
-            Enumeration<GameComponent> components = object.properties.elements();
-            while (components.hasMoreElements()) {
-                GameComponent gameComponent = components.nextElement();
+            // Calling the Update method of every game component
+
+            Set componentKeys = object.properties.keySet();
+            Iterator componentIterator = componentKeys.iterator();
+            
+            while (componentIterator.hasNext()) {
+                GameComponent gameComponent = object.properties.get(componentIterator.next());
                 gameComponent.start();
             }
         }
 
         // keep running until the user stops the game
-        while (!GameManager.stop) {
-            if (GameManager.running) {
+        while (!GameManager.stop) 
+        {
+            if (GameManager.running) 
+            {
                 // looping through every gameObject in objects model
-                for (int i = 0; i < GameManager.objectsModel.getSize(); i++) {
+                for (int i = 0; i < GameManager.objectsModel.getSize(); i++) 
+                {
                     GameObject object = GameManager.objectsModel.getElementAt(i);
                     // Calling the Update method of every game component
-                    Enumeration<GameComponent> components = object.properties.elements();
-                    while (components.hasMoreElements()) {
-                        GameComponent gameComponent = components.nextElement();
+
+                    Set componentKeys = object.properties.keySet();
+                    Iterator componentIterator = componentKeys.iterator();
+                    
+                    while (componentIterator.hasNext())
+                    {
+                        GameComponent gameComponent = object.properties.get(componentIterator.next());
                         gameComponent.update();
                     }
                 }
-                try {
+                try 
+                {
                     Thread.sleep(20);
-                } catch (InterruptedException e) {
+                } catch (InterruptedException e) 
+                {
                     e.printStackTrace();
                 }
             }
@@ -50,9 +64,13 @@ public class Render implements Runnable {
          // Reset the objects to their position
          for (int i = 0; i < GameManager.objectsModel.getSize(); i++) {
             GameObject object = GameManager.objectsModel.getElementAt(i);
-            Enumeration<GameComponent> components = object.properties.elements();
-            while (components.hasMoreElements()) {
-                GameComponent gameComponent = components.nextElement();
+            // Calling the Update method of every game component
+
+            Set componentKeys = object.properties.keySet();
+            Iterator componentIterator = componentKeys.iterator();
+
+            while (componentIterator.hasNext()) {
+                GameComponent gameComponent = object.properties.get(componentIterator.next());
                 gameComponent.stop();
             }
         }

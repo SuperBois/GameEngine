@@ -20,6 +20,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Set;
 import java.awt.event.*;
 import java.awt.*;
 
@@ -469,9 +471,12 @@ public class MainProgram extends JFrame {
         {
             Transform transform = (Transform) selectedObject.properties.get("Transform");
             System.out.println(transform.name);
-            Enumeration<String> keys = MainProgram.selectedObject.properties.keys();
-            while (keys.hasMoreElements()){
-                JPanel componentPanel = selectedObject.properties.get(keys.nextElement()).getPanel();
+            Set keys = MainProgram.selectedObject.properties.keySet();
+            Iterator iterator = keys.iterator();
+
+            while (iterator.hasNext()){
+                JPanel componentPanel = selectedObject.properties.get(iterator.next()).getPanel();
+                System.out.println(componentPanel);
                 componentPanel.setBackground(bg_color);
                 componentPanel.setForeground(fg_color);
                 tempPanel.add(componentPanel);
@@ -567,8 +572,11 @@ public class MainProgram extends JFrame {
                 GameObject gameObject = (GameObject)objects.elementAt(i);
                 GameManager.objectsModel.addElement(gameObject);
 
-                for(int index =0; index<gameObject.properties.size();index++){
-                    
+                Set keys = gameObject.properties.keySet();
+                Iterator iterator = keys.iterator();
+                
+                while (iterator.hasNext()){
+                    gameObject.properties.get(iterator.next()).createPanel();
                 }
             }
             objectInputStream.close();
@@ -623,10 +631,11 @@ public class MainProgram extends JFrame {
 
         for (int i = 0; i < GameManager.objectsModel.getSize(); i++ )
         {
-            Enumeration<String> keys = GameManager.objectsModel.getElementAt(i).properties.keys();
-            while (keys.hasMoreElements())
+            Set keys = GameManager.objectsModel.getElementAt(i).properties.keySet();
+            Iterator iterator = keys.iterator();
+            while (iterator.hasNext())
             {
-                String propertyKey = keys.nextElement();
+                String propertyKey = (String)iterator.next();
                 GameManager.objectsModel.getElementAt(i).properties.get(propertyKey).getPanel().setBackground(bg_color);
                 GameManager.objectsModel.getElementAt(i).properties.get(propertyKey).getPanel().setForeground(fg_color);
                 for (int k = 0; k < GameManager.objectsModel.getElementAt(i).properties.get(propertyKey).getLabels().size(); k++) 

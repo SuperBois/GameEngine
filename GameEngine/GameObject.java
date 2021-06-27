@@ -9,11 +9,11 @@ import GameEngine.Components.Definition.GameComponent;
 
 public class GameObject implements Serializable{
     public boolean canMove;
-    public Dictionary<String , GameComponent> properties;
+    public LinkedHashMap<String , GameComponent> properties;
     // public DefaultListModel<GameComponent> properties;
 
     GameObject(){
-        properties = new Hashtable<String , GameComponent>();
+        properties = new LinkedHashMap<String , GameComponent>();
         canMove = true;
 
         Transform transform = new Transform();
@@ -22,7 +22,8 @@ public class GameObject implements Serializable{
         AddComponent addComponent= new AddComponent();
         addComponent.setGameObject(this);
 
-        this.properties.put("Transform", transform);
+        
         this.properties.put("AddComponent", addComponent);
+        this.properties.put("Transform", transform);
     }
 }
