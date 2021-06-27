@@ -421,7 +421,7 @@ public class MainProgram extends JFrame {
 
         if (!(selectedObject == null))
         {
-            Transform transform = (Transform) selectedObjectproperties.get("Transform");
+            Transform transform = (Transform) selectedObject.properties.get("Transform");
             System.out.println(transform.name);
             Enumeration<String> keys = MainProgram.selectedObject.properties.keys();
             while (keys.hasMoreElements()){
@@ -496,7 +496,7 @@ public class MainProgram extends JFrame {
     private void openProject() {
         try {
 
-           // opening a file for writing output
+           // opening a file for reading classes model
            FileInputStream fileInputStream = new FileInputStream(GameManager.projectPath+"\\classes.ser");
            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
@@ -510,7 +510,7 @@ public class MainProgram extends JFrame {
            objectInputStream.close();
 
 
-            // opening a file for writing output
+            // opening a file for reading objects model
             fileInputStream = new FileInputStream(GameManager.projectPath+"\\object.ser");
             objectInputStream = new ObjectInputStream(fileInputStream);
 
@@ -520,8 +520,10 @@ public class MainProgram extends JFrame {
             for (int i =0; i<objects.size();i++){
                 GameObject gameObject = (GameObject)objects.elementAt(i);
                 GameManager.objectsModel.addElement(gameObject);
-                Transform transform = (Transform) gameObject.properties.get("Transform");
-                System.out.println(transform.name);
+
+                for(int index =0; index<gameObject.properties.size();index++){
+                    
+                }
             }
             objectInputStream.close();
            refreshFrame();
