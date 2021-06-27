@@ -14,7 +14,7 @@ public class Test {
         new NewScript();
         new PhysicsBody();
         new Move();
-
+        
         main.refreshFrame();
     }
 }

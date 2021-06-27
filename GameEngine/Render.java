@@ -2,11 +2,16 @@ package GameEngine;
 
 import java.util.Enumeration;
 
+import javax.swing.JFrame;
+
 import GameEngine.Components.Definition.GameComponent;
 
 public class Render implements Runnable {
     // Renders all the sprites on their respective positions on the screen
     public static void RenderSprites() {
+        JFrame frame = new JFrame("Game");
+        frame.setLayout(null);
+        frame.setDefaultCloseOperation(Stop());
         // Calling the Start Method of every game Component
         for (int i = 0; i < GameManager.objectsModel.getSize(); i++) {
             GameObject object = GameManager.objectsModel.getElementAt(i);
@@ -37,8 +42,13 @@ public class Render implements Runnable {
                 }
             }
         }
-        // Reset the objects to their position
-        for (int i = 0; i < GameManager.objectsModel.getSize(); i++) {
+        Stop();
+        frame.dispose();
+    }
+
+    static int Stop(){
+         // Reset the objects to their position
+         for (int i = 0; i < GameManager.objectsModel.getSize(); i++) {
             GameObject object = GameManager.objectsModel.getElementAt(i);
             Enumeration<GameComponent> components = object.properties.elements();
             while (components.hasMoreElements()) {
@@ -46,6 +56,7 @@ public class Render implements Runnable {
                 gameComponent.stop();
             }
         }
+        return JFrame.DISPOSE_ON_CLOSE;
     }
 
     @Override

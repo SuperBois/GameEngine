@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import GameEngine.Components.Definition.GameComponent;
 
-public class PhysicsBody extends GameComponent implements Serializable{
+public class CharacterController extends GameComponent implements Serializable{
     public int mass;
     public boolean useGravity;
     public boolean isKinematic;
@@ -16,7 +16,7 @@ public class PhysicsBody extends GameComponent implements Serializable{
     protected SpriteRenderer spriteRenderer;
     protected int y_pos;
 
-    public PhysicsBody() {
+    public CharacterController() {
         mass = 1;
         useGravity = true;
         isKinematic = false;
@@ -36,17 +36,15 @@ public class PhysicsBody extends GameComponent implements Serializable{
 
     @Override
     public void update() {
+        
         if (gameObject.canMove && useGravity && spriteRenderer != null) {
-            y_pos += (2 + mass);
             spriteRenderer.spriteLabel.setBounds(transform.pos_x, y_pos, transform.width, transform.height);
         }
     }
 
     @Override
     public void stop() {
-        if (gameObject.canMove && useGravity && spriteRenderer != null) {
         spriteRenderer.spriteLabel.setBounds(transform.pos_x, transform.pos_y, transform.width, transform.height);
-        }
     }
 
     @Override

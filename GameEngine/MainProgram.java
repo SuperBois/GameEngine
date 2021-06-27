@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.PlainDocument;
 
 import GameEngine.Renderer.DebugRenderer;
 import GameEngine.Renderer.FilesRenderer;
@@ -24,6 +25,7 @@ import java.awt.*;
 
 import GameEngine.Components.Transform;
 import GameEngine.Components.Definition.GameComponent;
+import GameEngine.Components.Filters.MyIntFilter;
 import GameEngine.Panels.TextEditorPanel;
 
 public class MainProgram extends JFrame {
@@ -134,8 +136,7 @@ public class MainProgram extends JFrame {
     }
 
     private int close() {
-        
-        return JFrame.DISPOSE_ON_CLOSE;
+        return JFrame.EXIT_ON_CLOSE;
     }
 
     private void CreateGUI() {
@@ -161,6 +162,10 @@ public class MainProgram extends JFrame {
         JMenuItem exportBuild = new JMenuItem("Build/Export");
         exportBuild.addActionListener(e -> buildProject());
         filemenu.add(exportBuild);
+        // calls buildProject method to build and export the current project
+        JMenuItem options = new JMenuItem("Options");
+        options.addActionListener(e -> showOptions());
+        filemenu.add(options);
         // calls exitProgram method to exit the program safely
         JMenuItem exit = new JMenuItem("Exit");
         exit.addActionListener(e -> exitProgram());
@@ -335,7 +340,6 @@ public class MainProgram extends JFrame {
           play.setBackground(Color.black);
           play.setFocusable(false);
           play.addActionListener(e -> {
-              play.setEnabled(false);
               GameManager.Play();});
           centerPanel.add(play);
           // Button to pause the game
@@ -404,6 +408,48 @@ public class MainProgram extends JFrame {
         enginePanel.add(bottomPane, BorderLayout.SOUTH);
         enginePanel.add(inspectorPanel, BorderLayout.EAST);
         enginePanel.add(displayPanel, BorderLayout.CENTER);
+    }
+
+    private void showOptions() {
+        JFrame frame = new JFrame("Options");
+        frame.setSize(400,400);
+        frame.setLayout(null);
+        JLabel widthLabel = new JLabel("Screen Width");
+        widthLabel.setBounds(20, 20, 100, 30);
+        JLabel heightLabel = new JLabel("Screen Height");
+        heightLabel.setBounds(20, 60, 100, 30);
+        
+        JTextField widthField = new JTextField();
+        widthField.setText(Integer.toString(GameManager.gameWindowWidth));
+        PlainDocument doc = (PlainDocument) widthField.getDocument();
+        doc.setDocumentFilter(new MyIntFilter());
+        widthField.setBounds(140, 20, 100,30);
+
+        JTextField heightField = new JTextField();
+        heightField.setText(Integer.toString(GameManager.gameWindowHeight));
+        heightField.setBounds(140, 60, 100,30);
+        heightField.addActionListener(e -> CloseOptionsMenu(heightField, widthField));
+
+        frame.add(widthField);
+        frame.add(heightField);
+        frame.add(widthLabel);
+        frame.add(heightLabel);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+        frame.setVisible(true);
+    }
+
+    private void CloseOptionsMenu(JTextField heightField, JTextField widthField) {
+        try{
+            if (heightField.getText()!=null){
+                GameManager.gameWindowHeight =Integer.parseInt(heightField.getText());
+            } 
+            if (widthField.getText()!=null){
+                GameManager.gameWindowWidth = Integer.parseInt(widthField.getText());
+            }
+        } catch (NumberFormatException numberFormatException){
+            GameManager.debugModel.addElement("Invalid Value for width or height of gamePanel");
+        }
     }
 
     private void addObject() {
