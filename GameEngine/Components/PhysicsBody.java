@@ -36,7 +36,7 @@ public class PhysicsBody extends GameComponent implements Serializable{
 
     @Override
     public void update() {
-        if (useGravity && spriteRenderer != null) {
+        if (gameObject.canMove && useGravity && spriteRenderer != null) {
             y_pos += (2 + mass);
             spriteRenderer.spriteLabel.setBounds(transform.pos_x, y_pos, transform.width, transform.height);
         }
