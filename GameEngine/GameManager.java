@@ -16,7 +16,7 @@ public class GameManager {
     public static boolean running = true, stop = false;
 
     public static String projectPath;
-    public static int gameWindowWidth = 400, gameWindowHeight=400;
+    public static int gameWindowWidth = 800, gameWindowHeight=600;
 
     public static JFrame frame = new JFrame();
 

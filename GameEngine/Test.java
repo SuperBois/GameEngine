@@ -13,7 +13,7 @@ public class Test {
         new SpriteRenderer();
         new NewScript();
         new PhysicsBody();
-        new Move();
+        new CharacterController();
         
         main.refreshFrame();
     }
