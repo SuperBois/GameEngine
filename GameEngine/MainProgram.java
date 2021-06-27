@@ -3,7 +3,6 @@ package GameEngine;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.PlainDocument;
 
 import GameEngine.Renderer.DebugRenderer;
@@ -17,14 +16,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Set;
 import java.awt.event.*;
 import java.awt.*;
 
+import GameEngine.Components.SpriteRenderer;
 import GameEngine.Components.Transform;
 import GameEngine.Components.Definition.GameComponent;
 import GameEngine.Components.Filters.MyIntFilter;
@@ -293,8 +291,10 @@ public class MainProgram extends JFrame {
                 JPopupMenu objectPopupMenu = new JPopupMenu();
         JMenuItem deleteOption = new JMenuItem("Delete");
         deleteOption.addActionListener(e->{GameManager.objectsModel.removeElement(selectedObject);
-                                           refreshFrame();
-                                          }
+            refreshFrame();
+            displayPanel.remove(((SpriteRenderer)selectedObject.properties.get("SpriteRenderer")).displayLabel);
+            GameManager.frame.remove(((SpriteRenderer)selectedObject.properties.get("SpriteRenderer")).displayLabel);                                  
+        }
                                       );
         objectPopupMenu.add(deleteOption);
 
@@ -349,9 +349,9 @@ public class MainProgram extends JFrame {
           pause.setIcon(new ImageIcon(getClass().getResource("Icons\\pause.png")));
           pause.setBackground(Color.BLACK);
           pause.setFocusable(false);
-        //   pause.addActionListener(e -> {
-        //     // play.setEnabled(true);  
-        //     GameManager.running =false;});
+          pause.addActionListener(e -> {
+            // play.setEnabled(true);  
+            GameManager.running =false;});
           centerPanel.add(pause);
           // Button to stop the game
           JButton stop = new JButton();

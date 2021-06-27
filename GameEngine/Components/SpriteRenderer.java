@@ -2,7 +2,6 @@ package GameEngine.Components;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.TransferHandler;
 
 import java.awt.Color;
 import java.io.Serializable;
@@ -15,16 +14,24 @@ import GameEngine.Components.Definition.GameComponent;
 public class SpriteRenderer extends GameComponent implements Serializable{
 
     public JLabel spriteLabel;
+    public JLabel displayLabel;
     public Color color; 
     private ImageIcon image;
 
     public SpriteRenderer(){
         this.spriteLabel = new JLabel();
+        
         this.color = Color.white;
         spriteLabel.setSize(100,100);
-        MainProgram.displayPanel.add(spriteLabel);
+        
+
         GameManager.frame.add(spriteLabel);
         createPanel();
+        
+        this.displayLabel = new JLabel();
+        displayLabel.setSize(100,100);
+        MainProgram.displayPanel.add(displayLabel);
+
         if (this.gameObject!=null){
             Transform transform = (Transform) gameObject.properties.get("Transform");
             spriteLabel.setBounds(transform.pos_x,transform.pos_y, transform.width,transform.height);

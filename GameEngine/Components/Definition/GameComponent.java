@@ -1,7 +1,6 @@
 package GameEngine.Components.Definition;
 
 import java.awt.*;
-import java.io.Serializable;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -91,6 +90,7 @@ public abstract class GameComponent {
         // looping through all the fields to create respective textboxes and checkboxes.
         for (int i = 0; i < fieldsID.length; i++) {
             // Field label to display field name
+            if (fieldsID[i].getName()!="displayLabel"){
             JLabel label = new JLabel(fieldsID[i].getName());
             label.setBounds(30, 30 * (i + 1) + 10, 100, 20);
             label.setForeground(Test.main.fg_color);
@@ -134,7 +134,7 @@ public abstract class GameComponent {
                     // adding it to array list and panel
                     checkBoxes.add(checkBox);
                     panel.add(checkBox);
-                } else if (fieldsID[i].get(this) instanceof JLabel) {
+                } else if (fieldsID[i].get(this) instanceof JLabel&&fieldsID[i].getName()!="displayLabel") {
                     // If the returned field value is String, then a textfield will be created
                     JButton selectImageButton = new JButton("Select Image");
                     selectImageButton.setBounds(130, 30 * (i + 1) + 10, 130, 20);
@@ -180,6 +180,7 @@ public abstract class GameComponent {
                 GameManager.debugModel.addElement("Access to this field is not possible...");
             }
         }
+        }
     }
 
     private void chooseImage() {
@@ -199,6 +200,7 @@ public abstract class GameComponent {
                             .get("SpriteRenderer");
                     spriteRenderer.setImage(new ImageIcon(fileChooser.getSelectedFile().getAbsolutePath()));
                     spriteRenderer.spriteLabel.setIcon(spriteRenderer.getImage());
+                    spriteRenderer.displayLabel.setIcon(spriteRenderer.getImage());
                 }
             }
         }
@@ -250,17 +252,21 @@ public abstract class GameComponent {
 
                         if (fieldsID[i].getName().equals("pos_x")) {
                             spriteRenderer.spriteLabel.setLocation(value, spriteRenderer.spriteLabel.getY());
-
+                            spriteRenderer.displayLabel.setLocation(value, spriteRenderer.spriteLabel.getY());
                         } else if (fieldsID[i].getName().equals("pos_y")) {
                             spriteRenderer.spriteLabel.setLocation(spriteRenderer.spriteLabel.getX(), value);
-
+                            spriteRenderer.displayLabel.setLocation(spriteRenderer.spriteLabel.getX(), value);
                         } else if (fieldsID[i].getName().equals("width")) {
                             spriteRenderer.spriteLabel.setSize(value, spriteRenderer.spriteLabel.getHeight());
+                            spriteRenderer.displayLabel.setSize(value, spriteRenderer.spriteLabel.getHeight());
                             spriteRenderer.spriteLabel.setIcon(spriteRenderer.getImage());
+                            spriteRenderer.displayLabel.setIcon(spriteRenderer.getImage());
 
                         } else if (fieldsID[i].getName().equals("height")) {
                             spriteRenderer.spriteLabel.setSize(spriteRenderer.spriteLabel.getWidth(), value);
+                            spriteRenderer.displayLabel.setSize(spriteRenderer.spriteLabel.getWidth(), value);
                             spriteRenderer.spriteLabel.setIcon(spriteRenderer.getImage());
+                            spriteRenderer.displayLabel.setIcon(spriteRenderer.getImage());
                         
                         }
                     }
@@ -287,11 +293,17 @@ public abstract class GameComponent {
                             spriteRenderer.spriteLabel.setSize( (int) (spriteRenderer.spriteLabel.getWidth() * value),
                                     spriteRenderer.spriteLabel.getHeight());
                             spriteRenderer.spriteLabel.setIcon(spriteRenderer.getImage());
+                            spriteRenderer.displayLabel.setSize( (int) (spriteRenderer.spriteLabel.getWidth() * value),
+                                    spriteRenderer.spriteLabel.getHeight());
+                            spriteRenderer.displayLabel.setIcon(spriteRenderer.getImage());
 
                         } else if (fieldsID[i].getName().equals("scale_y")) {
                             spriteRenderer.spriteLabel.setSize(spriteRenderer.spriteLabel.getWidth(),
                                     (int)(spriteRenderer.spriteLabel.getHeight() * value));
                             spriteRenderer.spriteLabel.setIcon(spriteRenderer.getImage());
+                            spriteRenderer.displayLabel.setSize(spriteRenderer.spriteLabel.getWidth(),
+                                    (int)(spriteRenderer.spriteLabel.getHeight() * value));
+                            spriteRenderer.displayLabel.setIcon(spriteRenderer.getImage());
                         }
                     }
 
