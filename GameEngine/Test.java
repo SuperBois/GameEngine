@@ -14,6 +14,7 @@ public class Test {
         new NewScript();
         new PhysicsBody();
         new CharacterController();
+        new SpawnRepeatedly();
         
         main.refreshFrame();
     }

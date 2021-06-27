@@ -37,6 +37,7 @@ public class GameManager {
             frame.setSize(gameWindowWidth,gameWindowHeight);
             frame.setLayout(null);
             frame.setVisible(true);
+            frame.setResizable(false);
 
             Runnable runnable1 = new Physics();
             Thread physicsThread = new Thread(runnable1);
