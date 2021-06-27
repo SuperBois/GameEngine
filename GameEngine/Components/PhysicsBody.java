@@ -7,7 +7,7 @@ import GameEngine.Components.Definition.GameComponent;
 public class PhysicsBody extends GameComponent implements Serializable{
     public int mass;
     public boolean useGravity;
-    public boolean isKinematic;
+    public boolean isStatic;
 
     protected int x_speed;
     protected int y_speed;
@@ -19,7 +19,7 @@ public class PhysicsBody extends GameComponent implements Serializable{
     public PhysicsBody() {
         mass = 1;
         useGravity = true;
-        isKinematic = false;
+        isStatic = false;
         createPanel();
     }
 
@@ -37,8 +37,8 @@ public class PhysicsBody extends GameComponent implements Serializable{
     @Override
     public void update() {
         if (gameObject.canMove && useGravity && spriteRenderer != null) {
-            y_pos += (2 + mass);
-            spriteRenderer.spriteLabel.setBounds(transform.pos_x, y_pos, transform.width, transform.height);
+            transform.pos_y += (2 + mass);
+            spriteRenderer.spriteLabel.setBounds(transform.pos_x, transform.pos_y, transform.width, transform.height);
         }
     }
 

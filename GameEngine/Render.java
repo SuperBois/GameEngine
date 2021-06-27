@@ -60,7 +60,7 @@ public class Render implements Runnable {
         frame.dispose();
     }
 
-    static int Stop(){
+    public static int Stop(){
          // Reset the objects to their position
          for (int i = 0; i < GameManager.objectsModel.getSize(); i++) {
             GameObject object = GameManager.objectsModel.getElementAt(i);

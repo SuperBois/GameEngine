@@ -1,7 +1,6 @@
 package GameEngine;
 
 import GameEngine.Components.*;
-//import java.awt.*;
 
 
 public class Test {
@@ -12,9 +11,10 @@ public class Test {
         // ---------------
         new SpriteRenderer();
         new NewScript();
+        new SpawnRepeatedly();
         new PhysicsBody();
         new CharacterController();
-        new SpawnRepeatedly();
+        
         
         main.refreshFrame();
     }

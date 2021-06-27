@@ -12,8 +12,13 @@ public class CharacterController extends GameComponent implements Serializable {
     protected Transform transform ;
     protected SpriteRenderer spriteRenderer;
     protected int x_pos, y_pos;
+    public boolean up,down,left,right;
     
     public CharacterController(){
+        up = true;
+        down = true;
+        right = true;
+        left = true;
         createPanel();
     }
 
@@ -35,23 +40,23 @@ public class CharacterController extends GameComponent implements Serializable {
             public void keyPressed(KeyEvent e) {
                 int key = e.getKeyCode();
                 
-                if (key == KeyEvent.VK_LEFT) {
-                    x_pos -= 15;
+                if ( left && key == KeyEvent.VK_LEFT) {
+                    x_pos -= 5;
                     System.out.println("left key pressed");
                 }
             
-                if (key == KeyEvent.VK_RIGHT) {
-                    x_pos += 15;
+                if (right && key == KeyEvent.VK_RIGHT) {
+                    x_pos += 5;
                     System.out.println("right key pressed");
                 }
             
-                if (key == KeyEvent.VK_UP) {
-                    y_pos -= 15;
+                if (up && key == KeyEvent.VK_UP) {
+                    y_pos -= 5;
                     System.out.println("up key pressed");
                 }
             
-                if (key == KeyEvent.VK_DOWN) {
-                    y_pos += 15;
+                if (down && key == KeyEvent.VK_DOWN) {
+                    y_pos += 5;
                     System.out.println("down key pressed");
                 }
                 spriteRenderer.spriteLabel.setBounds(x_pos, y_pos, transform.width, transform.height);

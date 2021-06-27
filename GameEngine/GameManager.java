@@ -4,6 +4,7 @@ import java.io.File;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import GameEngine.Components.Definition.GameComponent;
 
@@ -12,7 +13,9 @@ public class GameManager {
     static DefaultListModel<Object> projectFilesModel = new DefaultListModel<Object>();
     public static DefaultListModel<GameComponent>  classNameModel = new DefaultListModel<GameComponent>();
     public static DefaultListModel<String> debugModel = new DefaultListModel<String>();
-
+    public static int scores = 0;
+    
+    public static JLabel scoreLabel = new JLabel("0");
     public static boolean running = true, stop = false;
 
     public static String projectPath;
@@ -38,7 +41,9 @@ public class GameManager {
             frame.setLayout(null);
             frame.setVisible(true);
             frame.setResizable(false);
-
+            scoreLabel.setBounds(gameWindowWidth-100, 20, 80, 30);
+            frame.add(scoreLabel);
+            
             Runnable runnable1 = new Physics();
             Thread physicsThread = new Thread(runnable1);
             physicsThread.start();

@@ -476,7 +476,6 @@ public class MainProgram extends JFrame {
 
             while (iterator.hasNext()){
                 JPanel componentPanel = selectedObject.properties.get(iterator.next()).getPanel();
-                System.out.println(componentPanel);
                 componentPanel.setBackground(bg_color);
                 componentPanel.setForeground(fg_color);
                 tempPanel.add(componentPanel);
@@ -580,7 +579,7 @@ public class MainProgram extends JFrame {
                 }
             }
             objectInputStream.close();
-           refreshFrame();
+            refreshFrame();
 
         } catch (FileNotFoundException e) {
 

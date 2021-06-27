@@ -33,6 +33,8 @@ public class Physics implements Runnable {
 
                                 if (areaA.intersects(areaB.getBounds2D())){
                                     object.canMove = false;
+                                    Render.Stop();
+                                    GameManager.frame.dispose();
                                 }
                                 else
                                     object.canMove = true;
