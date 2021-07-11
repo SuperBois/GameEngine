@@ -468,8 +468,8 @@ public class MainProgram extends JFrame {
         {
             Transform transform = (Transform) selectedObject.properties.get("Transform");
             System.out.println(transform.name);
-            Set keys = MainProgram.selectedObject.properties.keySet();
-            Iterator iterator = keys.iterator();
+            Set<?> keys = MainProgram.selectedObject.properties.keySet();
+            Iterator<?> iterator = keys.iterator();
 
             while (iterator.hasNext()){
                 JPanel componentPanel = selectedObject.properties.get(iterator.next()).getPanel();
@@ -544,7 +544,7 @@ public class MainProgram extends JFrame {
            FileInputStream fileInputStream = new FileInputStream(GameManager.projectPath+"\\classes.ser");
            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
-           DefaultListModel classes = (DefaultListModel) objectInputStream.readObject();
+           DefaultListModel<?> classes = (DefaultListModel<?>) objectInputStream.readObject();
            // writing "array" to file
            GameManager.classNameModel.removeAllElements();
            for (int i =0; i<classes.size();i++){
@@ -558,15 +558,15 @@ public class MainProgram extends JFrame {
             fileInputStream = new FileInputStream(GameManager.projectPath+"\\object.ser");
             objectInputStream = new ObjectInputStream(fileInputStream);
 
-            DefaultListModel objects = (DefaultListModel) objectInputStream.readObject();
+            DefaultListModel<?> objects = (DefaultListModel<?>) objectInputStream.readObject();
             // writing "array" to file
             GameManager.objectsModel.removeAllElements();
             for (int i =0; i<objects.size();i++){
                 GameObject gameObject = (GameObject)objects.elementAt(i);
                 GameManager.objectsModel.addElement(gameObject);
 
-                Set keys = gameObject.properties.keySet();
-                Iterator iterator = keys.iterator();
+                Set<?> keys = gameObject.properties.keySet();
+                Iterator<?> iterator = keys.iterator();
                 
                 while (iterator.hasNext()){
 
@@ -630,8 +630,8 @@ public class MainProgram extends JFrame {
 
         for (int i = 0; i < GameManager.objectsModel.getSize(); i++ )
         {
-            Set keys = GameManager.objectsModel.getElementAt(i).properties.keySet();
-            Iterator iterator = keys.iterator();
+            Set<?> keys = GameManager.objectsModel.getElementAt(i).properties.keySet();
+            Iterator<?> iterator = keys.iterator();
             while (iterator.hasNext())
             {
                 String propertyKey = (String)iterator.next();

@@ -19,7 +19,6 @@ import GameEngine.Components.Filters.MyIntFilter;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -185,8 +184,8 @@ public abstract class GameComponent {
     }
 
     private void chooseImage() {
-        Set keys = MainProgram.selectedObject.properties.keySet();
-        Iterator iterator = keys.iterator();
+        Set<?> keys = MainProgram.selectedObject.properties.keySet();
+        Iterator<?> iterator = keys.iterator();
 
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setMultiSelectionEnabled(false);

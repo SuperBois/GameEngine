@@ -24,16 +24,7 @@ import javax.swing.JTable;
 import javax.swing.LayoutStyle;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
-
-import GameEngine.Components.CharacterController;
-import GameEngine.Components.NewScript;
-import GameEngine.Components.PhysicsBody;
-import GameEngine.Components.SpawnRepeatedly;
-import GameEngine.Components.SpriteRenderer;
-
 /**
  *
  * @author mdani
@@ -291,9 +282,9 @@ public class Main extends JFrame {
                         { "Test2", "27/06/2021 5:00PM", "Project File" },
                         { "PresentationDemo", "27/06/2021 7:00PM", "Project File" } },
                 new String[] { "File Name", "Last Modified", "Type" }) {
-            Class[] types = new Class[] { java.lang.String.class, java.lang.String.class, java.lang.Object.class };
+            Class<?>[] types = new Class[] { java.lang.String.class, java.lang.String.class, java.lang.Object.class };
 
-            public Class getColumnClass(int columnIndex) {
+            public Class<?> getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
         });

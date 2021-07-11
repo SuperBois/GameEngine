@@ -7,7 +7,6 @@ package GameEngine;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.File;
-import java.nio.file.Path;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -18,8 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 
 import GameEngine.Components.CharacterController;

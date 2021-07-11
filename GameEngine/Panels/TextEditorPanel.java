@@ -3,12 +3,10 @@ import javax.swing.*;
 
 import java.awt.*;
 import javax.swing.text.*;
-import java.awt.event.*;
 import java.io.*;
-import java.nio.file.Path;
-import java.util.*;
+import java.util.Scanner;
+
 import javax.swing.event.*;
-import javax.swing.filechooser.*;
 
 public class TextEditorPanel extends JPanel {
 
@@ -17,7 +15,7 @@ public class TextEditorPanel extends JPanel {
     JLabel fontLabel;
     JSpinner fontSizeSpinner;
     JButton fontColorButton;
-    JComboBox fontBox;
+    JComboBox<String> fontBox;
 
     JMenuBar menuBar;
     JMenu fileMenu;
@@ -125,7 +123,7 @@ public class TextEditorPanel extends JPanel {
 
         String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 
-        fontBox = new JComboBox(fonts);
+        fontBox = new JComboBox<String>(fonts);
         fontBox.addActionListener(e -> changeFont());
         fontBox.setSelectedItem("Consolas");
 
@@ -205,9 +203,7 @@ public class TextEditorPanel extends JPanel {
     }
 
     void changeFontColor() {
-        JColorChooser colorChooser = new JColorChooser();
-
-        Color color = colorChooser.showDialog(null, "Choose a color", Color.black);
+        Color color = JColorChooser.showDialog(null, "Choose a color", Color.black);
 
         textArea.setForeground(color);
     }

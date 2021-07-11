@@ -18,8 +18,8 @@ public class Render implements Runnable {
             GameObject object = GameManager.objectsModel.getElementAt(i);
             // Calling the Update method of every game component
 
-            Set componentKeys = object.properties.keySet();
-            Iterator componentIterator = componentKeys.iterator();
+            Set<?> componentKeys = object.properties.keySet();
+            Iterator<?> componentIterator = componentKeys.iterator();
             
             while (componentIterator.hasNext()) {
                 GameComponent gameComponent = object.properties.get(componentIterator.next());
@@ -38,8 +38,8 @@ public class Render implements Runnable {
                     GameObject object = GameManager.objectsModel.getElementAt(i);
                     // Calling the Update method of every game component
 
-                    Set componentKeys = object.properties.keySet();
-                    Iterator componentIterator = componentKeys.iterator();
+                    Set<?> componentKeys = object.properties.keySet();
+                    Iterator<?> componentIterator = componentKeys.iterator();
                     
                     while (componentIterator.hasNext())
                     {
@@ -66,8 +66,8 @@ public class Render implements Runnable {
             GameObject object = GameManager.objectsModel.getElementAt(i);
             // Calling the Update method of every game component
 
-            Set componentKeys = object.properties.keySet();
-            Iterator componentIterator = componentKeys.iterator();
+            Set<?> componentKeys = object.properties.keySet();
+            Iterator<?> componentIterator = componentKeys.iterator();
 
             while (componentIterator.hasNext()) {
                 GameComponent gameComponent = object.properties.get(componentIterator.next());

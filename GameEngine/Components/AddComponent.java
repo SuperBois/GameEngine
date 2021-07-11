@@ -3,7 +3,6 @@ package GameEngine.Components;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.Serializable;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -163,8 +162,8 @@ public class AddComponent extends GameComponent implements Serializable{
     }
 
     private boolean isInSelectedObjectProperties(String name) {
-        Set keys = MainProgram.selectedObject.properties.keySet();
-        Iterator iterator = keys.iterator();
+        Set<?> keys = MainProgram.selectedObject.properties.keySet();
+        Iterator<?> iterator = keys.iterator();
 
         while (iterator.hasNext()) {
             if (name.equals(iterator.next()))
