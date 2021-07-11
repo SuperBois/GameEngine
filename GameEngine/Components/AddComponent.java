@@ -21,7 +21,8 @@ import javax.swing.event.DocumentListener;
 
 import GameEngine.GameManager;
 import GameEngine.MainProgram;
-import GameEngine.Test;
+import GameEngine.NewWindow;
+
 import GameEngine.Components.Definition.GameComponent;
 import GameEngine.Renderer.ComponentListRenderer;
 
@@ -107,7 +108,7 @@ public class AddComponent extends GameComponent implements Serializable{
         button.setVisible(true);
         filteredClassList.setSelectedIndex(0);
         // scrolls the panel to bottom
-        Test.main.scrollToTop();
+        NewWindow.main.scrollToTop();
         // refreshes the frame
         refreshFrame();
         // requests focus for text field
@@ -147,18 +148,18 @@ public class AddComponent extends GameComponent implements Serializable{
         // add element at second last index
         if (!isInSelectedObjectProperties(newComponent.getClass().getSimpleName()))
             MainProgram.selectedObject.properties.put(newComponent.getClass().getSimpleName(), newComponent);
-        Test.main.showPanelofSelected();
+        NewWindow.main.showPanelofSelected();
         button.setVisible(false);
         scrollPane.setVisible(false);
         textField.setVisible(false);
         addComponentButton.setVisible(true);
-        Test.main.scrollToTop();
+        NewWindow.main.scrollToTop();
     }
 
     void refreshFrame() {
-        Test.main.invalidate();
-        Test.main.validate();
-        Test.main.repaint();
+        NewWindow.main.invalidate();
+        NewWindow.main.validate();
+        NewWindow.main.repaint();
     }
 
     private boolean isInSelectedObjectProperties(String name) {

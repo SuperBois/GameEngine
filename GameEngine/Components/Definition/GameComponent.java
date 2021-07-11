@@ -10,7 +10,8 @@ import javax.swing.filechooser.*;
 import GameEngine.GameManager;
 import GameEngine.GameObject;
 import GameEngine.MainProgram;
-import GameEngine.Test;
+import GameEngine.NewWindow;
+
 import GameEngine.Components.SpriteRenderer;
 import GameEngine.Components.Filters.MyFloatFilter;
 import GameEngine.Components.Filters.MyIntFilter;
@@ -60,7 +61,7 @@ public abstract class GameComponent {
 
     public void createPanel() {
         panel.setLayout(null);
-        panel.setBackground(Test.main.bg_color);
+        panel.setBackground(NewWindow.main.bg_color);
         // Setting size (specially Height) to accomodate all fields.
         panel.setBounds(0, 0, 270, 50 * fieldsID.length);
         panel.setPreferredSize(new Dimension(270, 50 * fieldsID.length));
@@ -81,7 +82,7 @@ public abstract class GameComponent {
             // Setting Jlabel to display class name.
             JLabel className = new JLabel(this.getClass().getSimpleName());
             className.setBounds(80, 5, 160, 20);
-            className.setForeground(Test.main.fg_color);
+            className.setForeground(NewWindow.main.fg_color);
             className.setFont(new Font("Times New Roman", Font.BOLD, 15));
             labels.add(className);
             panel.add(className);
@@ -93,7 +94,7 @@ public abstract class GameComponent {
             if (fieldsID[i].getName()!="displayLabel"){
             JLabel label = new JLabel(fieldsID[i].getName());
             label.setBounds(30, 30 * (i + 1) + 10, 100, 20);
-            label.setForeground(Test.main.fg_color);
+            label.setForeground(NewWindow.main.fg_color);
             labels.add(label);
             panel.add(label);
 
@@ -212,7 +213,7 @@ public abstract class GameComponent {
 
     protected void remove(GameComponent gameComponent) {
         MainProgram.selectedObject.properties.remove(this.getClass().getSimpleName());
-        Test.main.showPanelofSelected();
+        NewWindow.main.showPanelofSelected();
     }
 
     public GameComponent newObject() throws InstantiationException, IllegalAccessException, IllegalArgumentException,
@@ -321,7 +322,7 @@ public abstract class GameComponent {
         } catch (IllegalAccessException e) {
             GameManager.debugModel.addElement("Access to this field is not possible...");
         }
-        Test.main.refreshFrame();
+        NewWindow.main.refreshFrame();
     }
 
     // Abstract methods

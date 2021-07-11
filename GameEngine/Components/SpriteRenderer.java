@@ -8,7 +8,8 @@ import java.io.Serializable;
 
 import GameEngine.GameManager;
 import GameEngine.MainProgram;
-import GameEngine.Test;
+import GameEngine.NewWindow;
+
 import GameEngine.Components.Definition.GameComponent;
 
 public class SpriteRenderer extends GameComponent implements Serializable{
@@ -57,7 +58,7 @@ public class SpriteRenderer extends GameComponent implements Serializable{
     protected void remove(GameComponent gameComponent) {
         MainProgram.selectedObject.properties.remove(this.getClass().getSimpleName());
         MainProgram.displayPanel.remove(this.spriteLabel);
-        Test.main.showPanelofSelected();
+        NewWindow.main.showPanelofSelected();
     }
 
     public ImageIcon getImage() {

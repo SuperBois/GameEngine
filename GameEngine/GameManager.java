@@ -28,8 +28,10 @@ public class GameManager {
         projectPath = String.copyValueOf(location.toCharArray());
         File Directory = new File(location);
         File[] list = Directory.listFiles();
+        if (list != null) {
         for (File file : list)
             projectFilesModel.addElement(file);
+        }
         // this method is called when the program is opened so we set default operation in it 
         frame.setDefaultCloseOperation(closeOperation());
     }

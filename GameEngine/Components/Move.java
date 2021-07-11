@@ -31,16 +31,17 @@ public class Move extends GameComponent implements Serializable {
     @Override
     public void update() {
         if (gameObject.canMove && spriteRenderer != null) {
-            x_pos += x_speed;
-            y_pos += y_speed;
-            spriteRenderer.spriteLabel.setBounds(x_pos, y_pos, transform.width, transform.height);
+            
+            transform.pos_x += x_speed;
+            transform.pos_y += y_speed;
+            spriteRenderer.spriteLabel.setBounds(transform.pos_x, transform.pos_y,transform.width, transform.height);
         }
     }
     
     @Override
     public void stop(){
         if (gameObject.canMove && spriteRenderer != null) {
-        spriteRenderer.spriteLabel.setBounds(transform.pos_x, transform.pos_y, transform.width, transform.height);
+        spriteRenderer.spriteLabel.setBounds(x_pos, y_pos, transform.width, transform.height);
        }
     }
 

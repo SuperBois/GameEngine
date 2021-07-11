@@ -27,40 +27,50 @@ public class Customize extends JFrame
         fgColorTeller.setOpaque(true);
         fgColorTeller.setBounds(270,20,30,30);
         fgColorTeller.setBorder(frameBorder);
-        fgColorTeller.setBackground(Test.main.fg_color);
+        fgColorTeller.setBackground(NewWindow.main
+        .fg_color);
         this.add(fgColorTeller);
 
         JButton fgButton = new JButton("Choose");
         fgButton.setBounds(150, 20, 100, 30);
         fgButton.setHorizontalTextPosition(JButton.CENTER);
-        fgButton.addActionListener(e->{Test.main.fg_color = changeColor();
-                                       fgColorTeller.setBackground(Test.main.fg_color);
+        fgButton.addActionListener(e->{NewWindow.main
+            .fg_color = changeColor();
+                                       fgColorTeller.setBackground(NewWindow.main
+                                       .fg_color);
                                        refreshFrame();
-                                       Test.main.updateColor();
-                                       Test.main.refreshFrame(); });
-        
+                                       NewWindow.main
+                                       .updateColor();
+                                       NewWindow.main
+                                       .refreshFrame(); });
         this.add(fgButton);
 
         JLabel bgLabel = new JLabel("BackGround color  :  ");
         bgLabel.setBounds(20,70,130,30);
-        bgLabel.setBackground(Test.main.bg_color);
+        bgLabel.setBackground(NewWindow.main
+        .bg_color);
         this.add(bgLabel);
 
         JLabel bgColorTeller = new JLabel();
         bgColorTeller.setOpaque(true);
         bgColorTeller.setBounds(270,70,30,30);
         bgColorTeller.setBorder(frameBorder);
-        bgColorTeller.setBackground(Test.main.bg_color);
+        bgColorTeller.setBackground(NewWindow.main
+        .bg_color);
         this.add(bgColorTeller);
 
         JButton bgButton = new JButton("Choose");
         bgButton.setBounds(150, 70, 100, 30);
         bgButton.setHorizontalTextPosition(JButton.CENTER);
-        bgButton.addActionListener(e->{Test.main.bg_color = changeColor();
-                                       bgColorTeller.setBackground(Test.main.bg_color);
+        bgButton.addActionListener(e->{NewWindow.main
+            .bg_color = changeColor();
+                                       bgColorTeller.setBackground(NewWindow.main
+                                       .bg_color);
                                        refreshFrame();
-                                       Test.main.updateColor();
-                                       Test.main.refreshFrame(); });
+                                       NewWindow.main
+                                       .updateColor();
+                                       NewWindow.main
+                                       .refreshFrame(); });
         this.add(bgButton);
     }
 

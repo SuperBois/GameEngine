@@ -5,7 +5,7 @@ import java.io.Serializable;
 import GameEngine.Components.Definition.GameComponent;
 
 public class PhysicsBody extends GameComponent implements Serializable{
-    public int mass;
+    public int weight;
     public boolean useGravity;
     public boolean isStatic;
 
@@ -17,7 +17,7 @@ public class PhysicsBody extends GameComponent implements Serializable{
     protected int y_pos;
 
     public PhysicsBody() {
-        mass = 1;
+        weight = 1;
         useGravity = true;
         isStatic = false;
         createPanel();
@@ -37,7 +37,7 @@ public class PhysicsBody extends GameComponent implements Serializable{
     @Override
     public void update() {
         if (gameObject.canMove && useGravity && spriteRenderer != null) {
-            transform.pos_y += (2 + mass);
+            transform.pos_y += (2 + weight);
             spriteRenderer.spriteLabel.setBounds(transform.pos_x, transform.pos_y, transform.width, transform.height);
         }
     }

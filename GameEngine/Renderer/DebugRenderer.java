@@ -4,7 +4,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
-import GameEngine.Test;
+
+import GameEngine.NewWindow;
+
 import java.awt.Component;
 import java.awt.Font;
 
@@ -27,7 +29,7 @@ public Component getListCellRendererComponent(JList<? extends String> list, Stri
         if (isSelected) {
             setBackground(list.getSelectionBackground());
             setForeground(list.getSelectionForeground());
-            Test.main.refreshFrame();
+            NewWindow.main.refreshFrame();
         } else {
             setBackground(list.getBackground());
             setForeground(list.getForeground());

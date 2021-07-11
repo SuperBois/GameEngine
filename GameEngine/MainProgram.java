@@ -440,7 +440,6 @@ public class MainProgram extends JFrame {
         
         frame.setVisible(true);
     }
-
     private void CloseOptionsMenu(JTextField heightField, JTextField widthField) {
         try{
             if (heightField.getText()!=null){
@@ -453,11 +452,9 @@ public class MainProgram extends JFrame {
             GameManager.debugModel.addElement("Invalid Value for width or height of gamePanel");
         }
     }
-
     private void addObject() {
         GameManager.objectsModel.addElement(new GameObject());
     }
-
     public void showPanelofSelected() {
         inspectorPanel.removeAll();
         tempPanel.removeAll();
@@ -489,7 +486,6 @@ public class MainProgram extends JFrame {
         inspectorPanel.add(scrollPane);
         refreshFrame();
     }
-
     public void scrollToTop() {
         JScrollBar verticalBar = scrollPane.getVerticalScrollBar();
         AdjustmentListener downScroller = new AdjustmentListener() {
@@ -502,13 +498,11 @@ public class MainProgram extends JFrame {
         };
         verticalBar.addAdjustmentListener(downScroller);
     }
-
     void panelToTab(String name, JPanel panel){
         tabbedPane.add(name+space, panel);
     }
-
     private void exitProgram() {
-        // TODO: Add the code to exit the program safely
+        this.dispose();
     }
     private void showAbout() {
         // TODO: Add the code to show the about of program
@@ -575,7 +569,14 @@ public class MainProgram extends JFrame {
                 Iterator iterator = keys.iterator();
                 
                 while (iterator.hasNext()){
-                    gameObject.properties.get(iterator.next()).createPanel();
+
+                    GameComponent gamecomponent = gameObject.properties.get(iterator.next());
+                    gamecomponent.createPanel();
+                    if (gamecomponent.getClass().getSimpleName().equals("SpriteRenderer")) {
+                        SpriteRenderer spriterenderer = (SpriteRenderer) gamecomponent;
+                        displayPanel.add(spriterenderer.displayLabel);
+                        GameManager.frame.add(spriterenderer.spriteLabel);
+                    }
                 }
             }
             objectInputStream.close();
@@ -610,7 +611,6 @@ public class MainProgram extends JFrame {
         }
         return -1;
     }
-    
     public void updateColor(){
         // updating the colors of objects list
         objectsList.setBackground(bg_color);
