@@ -89,14 +89,6 @@ public class MainProgram extends JFrame {
         // fixing the width and height of jlist items
         projectFilesList.setFixedCellHeight(80);
         projectFilesList.setFixedCellWidth(90);
-        // debugList.setCellRenderer(new debugRenderer());
-
-        // // the list of all objects stored in object List
-        // if (objectsModel==null){
-        // objectsModel = new DefaultListModel<GameObject>(); // for test only
-        // System.out.println("Warning: The Object model is null");
-        // }
-        // creates a JList of all objects
 
         objectsList = new JList<GameObject>(GameManager.objectsModel);
         objectsList.setCellRenderer(new ObjectRenderer());
@@ -113,21 +105,9 @@ public class MainProgram extends JFrame {
         this.setJMenuBar(menuBar);
 
         
-        // JPanel componentPanel = new JPanel(new BorderLayout());
-        // componentPanel.add(new JLayer<JTabbedPane>(tabbedPane, new CloseableTabbedPaneLayerUI()));
-        // componentPanel.add(new JButton(new AbstractAction("add tab") {
-        //   @Override
-        //   public void actionPerformed(ActionEvent e) {
-        //     tabbedPane.addTab("test", new JPanel());
-        //   }
-        // }), BorderLayout.SOUTH);
-        
         CreateGUI();
         
         panelToTab("Engine",enginePanel);
-        // UIManager.put("TabbedPane.tabInsets", new Insets(2, 2, 2, 50));
-        // final JTabbedPane tabbedPane = new JTabbedPane();
-        // tabbedPane.addTab("A", new JPanel());
         
         this.add(tabbedPane);
         this.pack();
